@@ -12,7 +12,7 @@ public abstract class PermissionMatcherTest {
     public void testCaseInsensitivity() {
         assertTrue(matcher.isMatches("PERMISSION.*", "permission.Case.Are.does.NOT.matter"));
     }
-    
+
     //@Test
     public void testRanges() {
         // low boundary

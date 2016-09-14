@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum Interval {
+
     UNKNOWN(0),
     SECOND(1, "second", "s"),
     MINUTE(60, "minute", "m"),
@@ -32,7 +33,7 @@ public enum Interval {
     }
 
     public static Interval byLabel(String label) {
-        if(intervalMap.containsKey(label)) {
+        if (intervalMap.containsKey(label)) {
             return intervalMap.get(label);
         } else {
             return UNKNOWN;
@@ -42,8 +43,8 @@ public enum Interval {
     private final static Map<String, Interval> intervalMap = new HashMap<>();
 
     static {
-        for(Interval type : Interval.values()) {
-            for(String label : type.labels()) {
+        for (Interval type : Interval.values()) {
+            for (String label : type.labels()) {
                 intervalMap.put(label, type);
             }
         }

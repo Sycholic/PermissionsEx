@@ -16,26 +16,24 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
 package ru.tehkode.permissions.commands.exceptions;
-
 
 public class AutoCompleteChoicesException extends RuntimeException {
 
-	protected String[] choices;
-	protected String argName;
+    protected String[] choices;
+    protected String argName;
 
-	public AutoCompleteChoicesException(String[] choices, String argName) {
-		super();
-		this.choices = choices;
-		this.argName = argName;
-	}
+    public AutoCompleteChoicesException(String[] choices, String argName) {
+        super();
+        this.choices = choices;
+        this.argName = argName;
+    }
 
-	public String getArgName() {
-		return argName;
-	}
+    public String getArgName() {
+        return argName;
+    }
 
-	public String[] getChoices() {
-		return this.choices;
-	}
+    public String[] getChoices() {
+        return this.choices;
+    }
 }

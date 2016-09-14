@@ -27,13 +27,14 @@ import java.util.UUID;
  * @author t3hk0d3
  */
 public abstract class PermissionEvent extends Event implements Serializable {
-	private final UUID serverId;
 
-	public PermissionEvent(UUID id) {
-		serverId = id;
-	}
+    private final UUID serverId;
 
-	public UUID getSourceUUID() {
-		return serverId;
-	}
+    public PermissionEvent(UUID id) {
+        serverId = id;
+    }
+
+    public UUID getSourceUUID() {
+        return serverId;
+    }
 }

@@ -21,7 +21,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ru.tehkode.permissions.commands;
 
 /**
@@ -29,6 +28,6 @@ package ru.tehkode.permissions.commands;
  */
 public interface CommandListener {
 
-	public void onRegistered(CommandsManager manager);
+    public void onRegistered(CommandsManager manager);
 
 }

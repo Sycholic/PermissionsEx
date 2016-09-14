@@ -9,5 +9,4 @@ public class RegExpMatcherTest extends PermissionMatcherTest {
         this.matcher = new RegExpMatcher();
     }
 
-
 }

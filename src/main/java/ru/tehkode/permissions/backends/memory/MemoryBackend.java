@@ -44,72 +44,71 @@ public class MemoryBackend extends PermissionBackend {
         super(manager, config);
     }
 
-	@Override
-	public int getSchemaVersion() {
-		return -1;
-	}
+    @Override
+    public int getSchemaVersion() {
+        return -1;
+    }
 
-	@Override
-	protected void setSchemaVersion(int version) {
-		// no-op
-	}
+    @Override
+    protected void setSchemaVersion(int version) {
+        // no-op
+    }
 
+    @Override
+    public void reload() throws PermissionBackendException {
+    }
 
-	@Override
-	public void reload() throws PermissionBackendException {
-	}
+    @Override
+    public PermissionsUserData getUserData(String userName) {
+        return new MemoryData(userName);
+    }
 
-	@Override
-	public PermissionsUserData getUserData(String userName) {
-		return new MemoryData(userName);
-	}
+    @Override
+    public PermissionsGroupData getGroupData(String groupName) {
+        return new MemoryData(groupName);
+    }
 
-	@Override
-	public PermissionsGroupData getGroupData(String groupName) {
-		return new MemoryData(groupName);
-	}
+    @Override
+    public boolean hasUser(String userName) {
+        return false;
+    }
 
-	@Override
-	public boolean hasUser(String userName) {
-		return false;
-	}
+    @Override
+    public boolean hasGroup(String group) {
+        return false;
+    }
 
-	@Override
-	public boolean hasGroup(String group) {
-		return false;
-	}
+    @Override
+    public Collection<String> getUserIdentifiers() {
+        return Collections.emptySet();
+    }
 
-	@Override
-	public Collection<String> getUserIdentifiers() {
-		return Collections.emptySet();
-	}
+    @Override
+    public Collection<String> getUserNames() {
+        return Collections.emptySet();
+    }
 
-	@Override
-	public Collection<String> getUserNames() {
-		return Collections.emptySet();
-	}
+    @Override
+    public Collection<String> getGroupNames() {
+        return Collections.emptySet();
+    }
 
-	@Override
-	public Collection<String> getGroupNames() {
-		return Collections.emptySet();
-	}
+    @Override
+    public List<String> getWorldInheritance(String world) {
+        return Collections.emptyList();
+    }
 
-	@Override
-	public List<String> getWorldInheritance(String world) {
-		return Collections.emptyList();
-	}
+    @Override
+    public Map<String, List<String>> getAllWorldInheritance() {
+        return Collections.emptyMap();
+    }
 
-	@Override
-	public Map<String, List<String>> getAllWorldInheritance() {
-		return Collections.emptyMap();
-	}
+    @Override
+    public void setWorldInheritance(String world, List<String> inheritance) {
+    }
 
-	@Override
-	public void setWorldInheritance(String world, List<String> inheritance) {
-	}
+    @Override
+    public void writeContents(Writer writer) throws IOException {
 
-	@Override
-	public void writeContents(Writer writer) throws IOException {
-
-	}
+    }
 }

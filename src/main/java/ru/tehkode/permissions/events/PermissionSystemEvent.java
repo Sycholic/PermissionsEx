@@ -26,34 +26,35 @@ import java.util.UUID;
  * @author t3hk0d3
  */
 public class PermissionSystemEvent extends PermissionEvent {
-	protected Action action;
-	private static final HandlerList handlers = new HandlerList();
 
-	public PermissionSystemEvent(UUID sourceUUID, Action action) {
-		super(sourceUUID);
-		this.action = action;
-	}
+    protected Action action;
+    private static final HandlerList handlers = new HandlerList();
 
-	public Action getAction() {
-		return this.action;
-	}
+    public PermissionSystemEvent(UUID sourceUUID, Action action) {
+        super(sourceUUID);
+        this.action = action;
+    }
 
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
-	}
+    public Action getAction() {
+        return this.action;
+    }
 
-	public static HandlerList getHandlerList() {
-		return handlers;
-	}
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
+    }
 
-	public enum Action {
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
 
-		BACKEND_CHANGED,
-		RELOADED,
-		WORLDINHERITANCE_CHANGED,
-		DEFAULTGROUP_CHANGED,
-		DEBUGMODE_TOGGLE,
-		REINJECT_PERMISSIBLES,
-	}
+    public enum Action {
+
+        BACKEND_CHANGED,
+        RELOADED,
+        WORLDINHERITANCE_CHANGED,
+        DEFAULTGROUP_CHANGED,
+        DEBUGMODE_TOGGLE,
+        REINJECT_PERMISSIBLES,
+    }
 }

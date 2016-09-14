@@ -13,88 +13,89 @@ import ru.tehkode.permissions.events.PermissionSystemEvent;
 import ru.tehkode.permissions.exceptions.PermissionBackendException;
 
 /**
-* Listener for events from the NetEvents plugin
-*/
+ * Listener for events from the NetEvents plugin
+ */
 public class RemoteEventListener implements Listener {
-	private final NetEventsPlugin netEvents;
-	private final PermissionManager manager;
 
-	public RemoteEventListener(NetEventsPlugin netEvents, PermissionManager manager) {
-		this.netEvents = netEvents;
-		this.manager = manager;
-	}
+    private final NetEventsPlugin netEvents;
+    private final PermissionManager manager;
 
-	public boolean isLocal(PermissionEvent event) {
-		return netEvents == null || event.getSourceUUID().equals(netEvents.getServerUUID());
-	}
+    public RemoteEventListener(NetEventsPlugin netEvents, PermissionManager manager) {
+        this.netEvents = netEvents;
+        this.manager = manager;
+    }
 
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onEntityEvent(PermissionEntityEvent event) {
-		if (isLocal(event)) {
-			return;
-		}
-		final boolean reloadEntity, reloadAll;
+    public boolean isLocal(PermissionEvent event) {
+        return netEvents == null || event.getSourceUUID().equals(netEvents.getServerUUID());
+    }
 
-		switch (event.getAction()) {
-			case DEFAULTGROUP_CHANGED:
-			case RANK_CHANGED:
-			case INHERITANCE_CHANGED:
-				reloadAll = true;
-				reloadEntity = false;
-				break;
-			case SAVED:
-			case TIMEDPERMISSION_EXPIRED:
-				return;
-			default:
-				reloadEntity = true;
-				reloadAll = false;
-				break;
-		}
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onEntityEvent(PermissionEntityEvent event) {
+        if (isLocal(event)) {
+            return;
+        }
+        final boolean reloadEntity, reloadAll;
 
-		try {
-		if (reloadEntity) {
-				if (manager.getBackend() != null) {
-					manager.getBackend().reload();
-				}
-			switch (event.getType()) {
-				case USER:
-					manager.resetUser(event.getEntityIdentifier());
-					break;
-				case GROUP:
-					PermissionGroup group = manager.resetGroup(event.getEntityIdentifier());
-					if (group != null) {
-						for (PermissionUser user : group.getActiveUsers(true)) {
-							manager.resetUser(user.getIdentifier());
-						}
-					}
+        switch (event.getAction()) {
+            case DEFAULTGROUP_CHANGED:
+            case RANK_CHANGED:
+            case INHERITANCE_CHANGED:
+                reloadAll = true;
+                reloadEntity = false;
+                break;
+            case SAVED:
+            case TIMEDPERMISSION_EXPIRED:
+                return;
+            default:
+                reloadEntity = true;
+                reloadAll = false;
+                break;
+        }
 
-					break;
-			}
-		} else if (reloadAll) {
-			manager.reset();
-		}
-		} catch (PermissionBackendException e) {
-			e.printStackTrace();
-		}
-	}
+        try {
+            if (reloadEntity) {
+                if (manager.getBackend() != null) {
+                    manager.getBackend().reload();
+                }
+                switch (event.getType()) {
+                    case USER:
+                        manager.resetUser(event.getEntityIdentifier());
+                        break;
+                    case GROUP:
+                        PermissionGroup group = manager.resetGroup(event.getEntityIdentifier());
+                        if (group != null) {
+                            for (PermissionUser user : group.getActiveUsers(true)) {
+                                manager.resetUser(user.getIdentifier());
+                            }
+                        }
 
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onSystemEvent(PermissionSystemEvent event) {
-		if (isLocal(event)) {
-			return;
-		}
+                        break;
+                }
+            } else if (reloadAll) {
+                manager.reset();
+            }
+        } catch (PermissionBackendException e) {
+            e.printStackTrace();
+        }
+    }
 
-		switch (event.getAction()) {
-			case BACKEND_CHANGED:
-			case DEBUGMODE_TOGGLE:
-			case REINJECT_PERMISSIBLES:
-				return;
-		}
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onSystemEvent(PermissionSystemEvent event) {
+        if (isLocal(event)) {
+            return;
+        }
 
-		try {
-			manager.reset(false);
-		} catch (PermissionBackendException e) {
-			e.printStackTrace();
-		}
-	}
+        switch (event.getAction()) {
+            case BACKEND_CHANGED:
+            case DEBUGMODE_TOGGLE:
+            case REINJECT_PERMISSIBLES:
+                return;
+        }
+
+        try {
+            manager.reset(false);
+        } catch (PermissionBackendException e) {
+            e.printStackTrace();
+        }
+    }
 }
