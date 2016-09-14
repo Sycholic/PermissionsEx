@@ -99,7 +99,7 @@ public class PermissionList extends HashMap<String, Permission> {
         
         private final Permission perm;
 
-        public NotifyingChildrenMap(Permission perm) {
+        NotifyingChildrenMap(Permission perm) {
             super(perm.getChildren());
             this.perm = perm;
         }

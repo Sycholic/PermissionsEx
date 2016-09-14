@@ -144,7 +144,7 @@ public class CommandsManager {
         protected String regexp;
         protected List<String> arguments = new LinkedList<>();
 
-        public CommandSyntax(String syntax) {
+        CommandSyntax(String syntax) {
             this.originalSyntax = syntax;
 
             this.regexp = this.prepareSyntaxRegexp(syntax);
