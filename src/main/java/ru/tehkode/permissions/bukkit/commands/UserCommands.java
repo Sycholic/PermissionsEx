@@ -71,6 +71,9 @@ public class UserCommands extends PermissionsCommand {
 
     /**
      * User permission management
+     * @param plugin
+     * @param sender
+     * @param args
      */
     @Command(name = "pex",
             syntax = "user <user>",
@@ -466,6 +469,9 @@ public class UserCommands extends PermissionsCommand {
 
     /**
      * User's groups management
+     * @param plugin
+     * @param sender
+     * @param args
      */
     @Command(name = "pex",
             syntax = "user <user> group list [world]",

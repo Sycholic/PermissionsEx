@@ -302,6 +302,7 @@ public class PermissionManager {
      * Return all users in group
      *
      * @param groupName group's name
+     * @param worldName
      * @return PermissionUser array
      */
     public Set<PermissionUser> getUsers(String groupName, String worldName) {
@@ -316,6 +317,7 @@ public class PermissionManager {
      * Return all users in group and descendant groups
      *
      * @param groupName group's name
+     * @param worldName
      * @param inheritance true return members of descendant groups of specified
      * group
      * @return PermissionUser array for groupnName
@@ -445,6 +447,7 @@ public class PermissionManager {
      * Return all child groups of specified group
      *
      * @param groupName group's name
+     * @param worldName
      * @return PermissionGroup array
      */
     public List<PermissionGroup> getGroups(String groupName, String worldName) {
@@ -459,6 +462,7 @@ public class PermissionManager {
      * Return all descendants or child groups for groupName
      *
      * @param groupName group's name
+     * @param worldName
      * @param inheritance true: only direct child groups would be returned
      * @return unmodifiable PermissionGroup list for specified groupName
      */
@@ -510,6 +514,7 @@ public class PermissionManager {
      * Reset in-memory object for groupName
      *
      * @param groupName group's name
+     * @return result of groupName removal from groups   
      */
     public PermissionGroup resetGroup(String groupName) {
         return this.groups.remove(groupName.toLowerCase());
@@ -601,6 +606,7 @@ public class PermissionManager {
      * resetting.
      *
      * @param backendName name of backend to set to
+     * @throws ru.tehkode.permissions.exceptions.PermissionBackendException
      */
     public void setBackend(String backendName) throws PermissionBackendException {
         synchronized (this) {
@@ -618,6 +624,8 @@ public class PermissionManager {
      *
      * @param backendName Name of the configuration section which describes this
      * backend
+     * @return PermissionBackend object
+     * @throws ru.tehkode.permissions.exceptions.PermissionBackendException
      */
     public PermissionBackend createBackend(String backendName) throws PermissionBackendException {
         ConfigurationSection config = this.config.getBackendConfig(backendName);
@@ -646,6 +654,7 @@ public class PermissionManager {
     /**
      * Reset all in-memory groups and users, clean up runtime stuff, reloads
      * backend
+     * @throws ru.tehkode.permissions.exceptions.PermissionBackendException
      */
     public void reset() throws PermissionBackendException {
         reset(true);
@@ -656,6 +665,7 @@ public class PermissionManager {
      * backend
      *
      * @param callEvent Call the reload event
+     * @throws ru.tehkode.permissions.exceptions.PermissionBackendException
      */
     public void reset(boolean callEvent) throws PermissionBackendException {
         this.clearCache();

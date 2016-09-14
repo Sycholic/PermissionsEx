@@ -214,6 +214,9 @@ public class GroupCommands extends PermissionsCommand {
 
     /**
      * Group inheritance
+     * @param plugin
+     * @param sender
+     * @param args
      */
     @Command(name = "pex",
             syntax = "group <group> parents [world]",
@@ -357,6 +360,9 @@ public class GroupCommands extends PermissionsCommand {
 
     /**
      * Group permissions
+     * @param plugin
+     * @param sender
+     * @param args
      */
     @Command(name = "pex",
             syntax = "group <group>",
@@ -563,6 +569,9 @@ public class GroupCommands extends PermissionsCommand {
 
     /**
      * Group users management
+     * @param plugin
+     * @param sender
+     * @param args
      */
     @Command(name = "pex",
             syntax = "group <group> users",

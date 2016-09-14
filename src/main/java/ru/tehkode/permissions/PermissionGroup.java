@@ -131,6 +131,7 @@ public class PermissionGroup extends PermissionEntity implements Comparable<Perm
      * Check if this group is descendant of specified group
      *
      * @param group group object of parent
+     * @param worldName
      * @param checkInheritance set to false to check only the direct inheritance
      * @return true if this group is descendant or direct parent of specified
      * group
@@ -187,6 +188,7 @@ public class PermissionGroup extends PermissionEntity implements Comparable<Perm
      * Check if this group is descendant of specified group
      *
      * @param groupName name of group to check against
+     * @param worldName
      * @param checkInheritance set to false to check only the direct inheritance
      * @return
      */
@@ -202,6 +204,7 @@ public class PermissionGroup extends PermissionEntity implements Comparable<Perm
      * Check if specified group is direct parent of this group
      *
      * @param groupName to check against
+     * @param worldName
      * @return
      */
     public boolean isChildOf(String groupName, String worldName) {
@@ -215,6 +218,7 @@ public class PermissionGroup extends PermissionEntity implements Comparable<Perm
     /**
      * Return array of direct child group objects
      *
+     * @param worldName
      * @return
      */
     public List<PermissionGroup> getChildGroups(String worldName) {
@@ -228,6 +232,7 @@ public class PermissionGroup extends PermissionEntity implements Comparable<Perm
     /**
      * Return array of descendant group objects
      *
+     * @param worldName
      * @return
      */
     public List<PermissionGroup> getDescendantGroups(String worldName) {
@@ -241,6 +246,7 @@ public class PermissionGroup extends PermissionEntity implements Comparable<Perm
     /**
      * Return array of direct members (users) of this group
      *
+     * @param worldName
      * @return
      */
     public Set<PermissionUser> getUsers(String worldName) {
@@ -307,6 +313,7 @@ public class PermissionGroup extends PermissionEntity implements Comparable<Perm
     /**
      * Returns direct parents names of this group
      *
+     * @param worldName
      * @return array of parents group names
      * @deprecated See {@link #getParentIdentifiers(String)}
      */
@@ -324,6 +331,7 @@ public class PermissionGroup extends PermissionEntity implements Comparable<Perm
      * Set parent groups
      *
      * @param parentGroups Array of parent groups names to set
+     * @param worldName
      * @deprecated See {@link #setParentsIdentifier(List, String)}
      */
     @Deprecated
@@ -340,6 +348,7 @@ public class PermissionGroup extends PermissionEntity implements Comparable<Perm
      * Set parent groups
      *
      * @param parentGroups Array of parent groups objects to set
+     * @param worldName
      */
     @Deprecated
     public void setParentGroupObjects(List<PermissionGroup> parentGroups, String worldName) {
@@ -354,6 +363,7 @@ public class PermissionGroup extends PermissionEntity implements Comparable<Perm
     /**
      * Returns array of parent groups objects
      *
+     * @param worldName
      * @return unmodifiable list of parent group objects
      * @deprecated Use {@link #getParents(String)} instead
      */

@@ -80,6 +80,7 @@ public class StringUtils {
      *
      * @param is an InputStream to read from
      * @return a String representing the input read from the InputStream
+     * @throws java.io.IOException
      */
     public static String readStream(InputStream is) throws IOException {
         if (is != null) {

@@ -8,6 +8,7 @@ import java.util.Set;
 
 /**
  * Class created to simplify hierarchy traversal for entities
+ * @param <Return>
  */
 public abstract class HierarchyTraverser<Return> {
 

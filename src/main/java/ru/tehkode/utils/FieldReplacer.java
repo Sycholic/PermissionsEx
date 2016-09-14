@@ -4,6 +4,8 @@ import java.lang.reflect.Field;
 
 /**
  * @author zml2008
+ * @param <Instance>
+ * @param <Type>
  */
 public class FieldReplacer<Instance, Type> {
 
