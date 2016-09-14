@@ -56,10 +56,6 @@
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                             <relocations>
                                 <relocation>
-                                    <pattern>net.gravitydevelopment.updater</pattern>
-                                    <shadedPattern>ru.tehkode.libs.net.gravitydevelopment.updater</shadedPattern>
-                                </relocation>
-                                <relocation>
                                     <pattern>org.apache</pattern>
                                     <shadedPattern>ru.tehkode.libs.org.apache</shadedPattern>
                                     <excludes>
@@ -114,11 +110,6 @@
             <version>1.4</version>
         </dependency>
         <dependency>
-            <groupId>net.gravitydevelopment.updater</groupId>
-            <artifactId>updater</artifactId>
-            <version>2.3</version>
-        </dependency>
-        <dependency>
             <groupId>com.mojang</groupId>
             <artifactId>AccountsClient</artifactId>
             <version>unspecified</version>
@@ -128,10 +119,6 @@
         <repository>
             <id>pex-repo</id>
             <url>http://pex-repo.aoeu.xyz</url>
-        </repository>
-        <repository>
-            <id>gravity-repo</id>
-            <url>http://repo.gravitydevelopment.net</url>
         </repository>
         <repository>
             <id>spigot-repo</id>
