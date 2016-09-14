@@ -27,8 +27,12 @@ import java.util.UUID;
  */
 public class PermissionSystemEvent extends PermissionEvent {
 
-    protected Action action;
     private static final HandlerList handlers = new HandlerList();
+
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+    protected Action action;
 
     public PermissionSystemEvent(UUID sourceUUID, Action action) {
         super(sourceUUID);
@@ -41,10 +45,6 @@ public class PermissionSystemEvent extends PermissionEvent {
 
     @Override
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 

@@ -36,6 +36,13 @@ public class PermissionUser extends PermissionEntity {
 
     private final static String PERMISSION_NOT_FOUND = "<not found>"; // used replace null for ConcurrentHashMap
 
+    static String getTimedGroupName(String option) {
+        if (!option.startsWith("group-") && !option.endsWith("-until")) {
+            return null;
+        }
+        return option.substring("group-".length(), option.length() - "-until".length());
+    }
+
     private final PermissionsUserData data;
     protected Map<String, List<PermissionGroup>> cachedGroups = new HashMap<>();
     protected Map<String, List<String>> cachedPermissions = new HashMap<>();
@@ -621,19 +628,11 @@ public class PermissionUser extends PermissionEntity {
         }
     }
 
-    static String getTimedGroupName(String option) {
-        if (!option.startsWith("group-") && !option.endsWith("-until")) {
-            return null;
-        }
-        return option.substring("group-".length(), option.length() - "-until".length());
-    }
-
     // Compatibility methods
     @Deprecated
-    public String[] getGroupsNames() {
-        return getGroupsNames(null);
-    }
-
+public String[] getGroupsNames() {
+    return getGroupsNames(null);
+}
     @Deprecated
     public String[] getGroupsNames(String world) {
         return getParentIdentifiers(world).toArray(new String[0]);
@@ -709,4 +708,5 @@ public class PermissionUser extends PermissionEntity {
     public void setGroups(PermissionGroup[] parentGroups) {
         setParents(Arrays.asList(parentGroups));
     }
+
 }

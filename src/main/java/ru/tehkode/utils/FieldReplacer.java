@@ -7,6 +7,17 @@ import java.lang.reflect.Field;
  */
 public class FieldReplacer<Instance, Type> {
 
+    private static Field getField(Class<?> clazz, String fieldName) {
+        while (clazz != null && clazz != Object.class) {
+            try {
+                return clazz.getDeclaredField(fieldName);
+            } catch (NoSuchFieldException e) {
+                clazz = clazz.getSuperclass();
+            }
+        }
+        return null;
+    }
+
     private final Class<Type> requiredType;
     private final Field field;
 
@@ -39,14 +50,4 @@ public class FieldReplacer<Instance, Type> {
         }
     }
 
-    private static Field getField(Class<?> clazz, String fieldName) {
-        while (clazz != null && clazz != Object.class) {
-            try {
-                return clazz.getDeclaredField(fieldName);
-            } catch (NoSuchFieldException e) {
-                clazz = clazz.getSuperclass();
-            }
-        }
-        return null;
-    }
 }

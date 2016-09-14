@@ -22,6 +22,17 @@ public class PermissionList extends HashMap<String, Permission> {
     private static FieldReplacer<PluginManager, Map> INJECTOR;
 
     private static final Map<Class<?>, FieldReplacer<Permission, Map>> CHILDREN_MAPS = new HashMap<>();
+
+    public static PermissionList inject(PluginManager manager) {
+        if (INJECTOR == null) {
+            INJECTOR = new FieldReplacer<>(manager.getClass(), "permissions", Map.class);
+        }
+        Map existing = INJECTOR.get(manager);
+        @SuppressWarnings("unchecked")
+                PermissionList list = new PermissionList(existing);
+        INJECTOR.set(manager, list);
+        return list;
+    }
     /**
      * k = child permission v.k = parent permission v.v = value parent gives
      * child
@@ -52,9 +63,40 @@ public class PermissionList extends HashMap<String, Permission> {
             }
         }
     }
+    
+    
+    @Override
+    public Permission put(String k, Permission v) {
+        for (Map.Entry<String, Boolean> ent : v.getChildren().entrySet()) {
+            childParentMapping.put(ent.getKey(), new SimpleEntry<>(v.getName(), ent.getValue()));
+        }
+        FieldReplacer<Permission, Map> repl = getFieldReplacer(v);
+        repl.set(v, new NotifyingChildrenMap(v));
+        return super.put(k, v);
+    }
+
+    @Override
+    public Permission remove(Object k) {
+        Permission ret = super.remove(k);
+        if (ret != null) {
+            removeAllChildren(k.toString());
+            getFieldReplacer(ret).set(ret, new LinkedHashMap<>(ret.getChildren()));
+        }
+        return ret;
+    }
+
+    @Override
+    public void clear() {
+        childParentMapping.clear();
+        super.clear();
+    }
+
+    public Collection<Map.Entry<String, Boolean>> getParents(String permission) {
+        return ImmutableSet.copyOf(childParentMapping.get(permission.toLowerCase()));
+    }
 
     private class NotifyingChildrenMap extends LinkedHashMap<String, Boolean> {
-
+        
         private final Permission perm;
 
         public NotifyingChildrenMap(Permission perm) {
@@ -88,46 +130,5 @@ public class PermissionList extends HashMap<String, Permission> {
             removeAllChildren(perm.getName());
             super.clear();
         }
-    }
-
-    public static PermissionList inject(PluginManager manager) {
-        if (INJECTOR == null) {
-            INJECTOR = new FieldReplacer<>(manager.getClass(), "permissions", Map.class);
-        }
-        Map existing = INJECTOR.get(manager);
-        @SuppressWarnings("unchecked")
-        PermissionList list = new PermissionList(existing);
-        INJECTOR.set(manager, list);
-        return list;
-    }
-
-    @Override
-    public Permission put(String k, Permission v) {
-        for (Map.Entry<String, Boolean> ent : v.getChildren().entrySet()) {
-            childParentMapping.put(ent.getKey(), new SimpleEntry<>(v.getName(), ent.getValue()));
-        }
-        FieldReplacer<Permission, Map> repl = getFieldReplacer(v);
-        repl.set(v, new NotifyingChildrenMap(v));
-        return super.put(k, v);
-    }
-
-    @Override
-    public Permission remove(Object k) {
-        Permission ret = super.remove(k);
-        if (ret != null) {
-            removeAllChildren(k.toString());
-            getFieldReplacer(ret).set(ret, new LinkedHashMap<>(ret.getChildren()));
-        }
-        return ret;
-    }
-
-    @Override
-    public void clear() {
-        childParentMapping.clear();
-        super.clear();
-    }
-
-    public Collection<Map.Entry<String, Boolean>> getParents(String permission) {
-        return ImmutableSet.copyOf(childParentMapping.get(permission.toLowerCase()));
     }
 }

@@ -23,14 +23,6 @@ public class PEXPermissionSubscriptionMap extends HashMap<String, Map<Permissibl
 
     private static FieldReplacer<PluginManager, Map> INJECTOR;
     private static final AtomicReference<PEXPermissionSubscriptionMap> INSTANCE = new AtomicReference<>();
-    private final PermissionsEx plugin;
-    private final PluginManager manager;
-
-    private PEXPermissionSubscriptionMap(PermissionsEx plugin, PluginManager manager, Map<String, Map<Permissible, Boolean>> backing) {
-        super(backing);
-        this.plugin = plugin;
-        this.manager = manager;
-    }
 
     /**
      * Inject a PEX permission subscription map into the provided plugin
@@ -38,7 +30,7 @@ public class PEXPermissionSubscriptionMap extends HashMap<String, Map<Permissibl
      *
      * @param manager The manager to inject into
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(value = "unchecked")
     public static PEXPermissionSubscriptionMap inject(PermissionsEx plugin, PluginManager manager) {
         PEXPermissionSubscriptionMap map = INSTANCE.get();
         if (map != null) {
@@ -60,6 +52,14 @@ public class PEXPermissionSubscriptionMap extends HashMap<String, Map<Permissibl
         } else {
             return INSTANCE.get();
         }
+    }
+    private final PermissionsEx plugin;
+    private final PluginManager manager;
+
+    private PEXPermissionSubscriptionMap(PermissionsEx plugin, PluginManager manager, Map<String, Map<Permissible, Boolean>> backing) {
+        super(backing);
+        this.plugin = plugin;
+        this.manager = manager;
     }
 
     /**
@@ -101,6 +101,7 @@ public class PEXPermissionSubscriptionMap extends HashMap<String, Map<Permissibl
         }
         return super.put(key, value);
     }
+
 
     public class PEXSubscriptionValueMap implements Map<Permissible, Boolean> {
 

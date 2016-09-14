@@ -19,6 +19,11 @@ import static ru.tehkode.permissions.bukkit.CraftBukkitInterface.getCBClassName;
  * @author zml2008
  */
 public class RegexPermissions {
+    protected static final PermissibleInjector[] injectors = new PermissibleInjector[]{
+        new PermissibleInjector.ClassPresencePermissibleInjector("net.glowstone.entity.GlowHumanEntity", "permissions", true),
+        new PermissibleInjector.ClassPresencePermissibleInjector("org.getspout.server.entity.SpoutHumanEntity", "permissions", true),
+        new PermissibleInjector.ClassNameRegexPermissibleInjector("org.getspout.spout.player.SpoutCraftPlayer", "perm", false, "org\\.getspout\\.spout\\.player\\.SpoutCraftPlayer"),
+        new PermissibleInjector.ClassPresencePermissibleInjector(getCBClassName("entity.CraftHumanEntity"), "perm", true),};
 
     private final PermissionsEx plugin;
     private PermissionList permsList;
@@ -33,11 +38,6 @@ public class RegexPermissions {
         injectAllPermissibles();
     }
 
-    protected static final PermissibleInjector[] injectors = new PermissibleInjector[]{
-        new PermissibleInjector.ClassPresencePermissibleInjector("net.glowstone.entity.GlowHumanEntity", "permissions", true),
-        new PermissibleInjector.ClassPresencePermissibleInjector("org.getspout.server.entity.SpoutHumanEntity", "permissions", true),
-        new PermissibleInjector.ClassNameRegexPermissibleInjector("org.getspout.spout.player.SpoutCraftPlayer", "perm", false, "org\\.getspout\\.spout\\.player\\.SpoutCraftPlayer"),
-        new PermissibleInjector.ClassPresencePermissibleInjector(getCBClassName("entity.CraftHumanEntity"), "perm", true),};
 
     public void onDisable() {
         subscriptionHandler.uninject();

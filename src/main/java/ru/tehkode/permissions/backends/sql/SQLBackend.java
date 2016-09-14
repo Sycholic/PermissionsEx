@@ -53,13 +53,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * @author code
  */
 public class SQLBackend extends PermissionBackend {
-
-    protected Map<String, List<String>> worldInheritanceCache = new HashMap<>();
-    private final AtomicReference<ImmutableSet<String>> userNamesCache = new AtomicReference<>(), groupNamesCache = new AtomicReference<>();
-    private Map<String, Object> tableNames;
-    private SQLQueryCache queryCache;
     private static final SQLQueryCache DEFAULT_QUERY_CACHE;
-
     static {
         try {
             DEFAULT_QUERY_CACHE = new SQLQueryCache(SQLBackend.class.getResourceAsStream("/sql/default/queries.properties"), null);
@@ -67,6 +61,22 @@ public class SQLBackend extends PermissionBackend {
             throw new ExceptionInInitializerError(e);
         }
     }
+
+    protected static String getDriverClass(String alias) {
+        if (alias.equals("mysql")) {
+            return "com.mysql.jdbc.Driver";
+        } else if (alias.equals("sqlite")) {
+            return "org.sqlite.JDBC";
+        } else if (alias.matches("postgres?")) {
+            return "org.postgresql.Driver";
+        }
+        return null;
+    }
+
+    protected Map<String, List<String>> worldInheritanceCache = new HashMap<>();
+    private final AtomicReference<ImmutableSet<String>> userNamesCache = new AtomicReference<>(), groupNamesCache = new AtomicReference<>();
+    private Map<String, Object> tableNames;
+    private SQLQueryCache queryCache;
 
     private BasicDataSource ds;
     protected final String dbDriver;
@@ -225,17 +235,6 @@ public class SQLBackend extends PermissionBackend {
 
     SQLQueryCache getQueryCache() {
         return queryCache;
-    }
-
-    protected static String getDriverClass(String alias) {
-        if (alias.equals("mysql")) {
-            return "com.mysql.jdbc.Driver";
-        } else if (alias.equals("sqlite")) {
-            return "org.sqlite.JDBC";
-        } else if (alias.matches("postgres?")) {
-            return "org.postgresql.Driver";
-        }
-        return null;
     }
 
     public SQLConnection getSQL() throws SQLException {
@@ -571,5 +570,6 @@ public class SQLBackend extends PermissionBackend {
             }
         }
     }
+
 
 }

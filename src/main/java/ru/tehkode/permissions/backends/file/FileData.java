@@ -11,6 +11,26 @@ import java.util.logging.Level;
 
 public class FileData implements PermissionsUserData, PermissionsGroupData {
 
+    protected static String formatPath(String worldName, String node, String value) {
+        String path = FileBackend.buildPath(node, value);
+        
+        if (worldName != null && !worldName.isEmpty()) {
+            path = FileBackend.buildPath("worlds", worldName, path);
+        }
+        
+        return path;
+    }
+
+    protected static String formatPath(String worldName, String node) {
+        String path = node;
+        
+        if (worldName != null && !worldName.isEmpty()) {
+            path = FileBackend.buildPath("worlds", worldName, path);
+        }
+        
+        return path;
+    }
+
     protected transient final FileConfig config;
     private String nodePath, entityName;
     private final String basePath;
@@ -272,23 +292,4 @@ public class FileData implements PermissionsUserData, PermissionsGroupData {
         return options;
     }
 
-    protected static String formatPath(String worldName, String node, String value) {
-        String path = FileBackend.buildPath(node, value);
-
-        if (worldName != null && !worldName.isEmpty()) {
-            path = FileBackend.buildPath("worlds", worldName, path);
-        }
-
-        return path;
-    }
-
-    protected static String formatPath(String worldName, String node) {
-        String path = node;
-
-        if (worldName != null && !worldName.isEmpty()) {
-            path = FileBackend.buildPath("worlds", worldName, path);
-        }
-
-        return path;
-    }
 }

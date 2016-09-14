@@ -56,6 +56,7 @@ public class PermissiblePEX extends PermissibleBase {
     private static final FieldReplacer<PermissibleBase, Map> PERMISSIONS_FIELD = new FieldReplacer<>(PermissibleBase.class, "permissions", Map.class);
     private static final FieldReplacer<PermissibleBase, List> ATTACHMENTS_FIELD = new FieldReplacer<>(PermissibleBase.class, "attachments", List.class);
     private static final Method CALC_CHILD_PERMS_METH;
+    private static final AtomicBoolean LAST_CALL_ERRORED = new AtomicBoolean(false);
 
     static {
         try {
@@ -68,7 +69,6 @@ public class PermissiblePEX extends PermissibleBase {
 
     private final Map<String, PermissionAttachmentInfo> permissions;
     private final List<PermissionAttachment> attachments;
-    private static final AtomicBoolean LAST_CALL_ERRORED = new AtomicBoolean(false);
 
     protected final Player player;
     protected final PermissionsEx plugin;

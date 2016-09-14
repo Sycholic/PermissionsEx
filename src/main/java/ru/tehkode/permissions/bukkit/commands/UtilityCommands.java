@@ -49,6 +49,19 @@ import java.util.logging.Level;
 
 public class UtilityCommands extends PermissionsCommand {
 
+    private static int tryGetInt(CommandSender sender, Map<String, String> args, String key, int def) {
+        if (!args.containsKey(key)) {
+            return def;
+        }
+        
+        try {
+            return Integer.parseInt(args.get(key));
+        } catch (NumberFormatException e) {
+            sender.sendMessage(ChatColor.RED + "Invalid " + key + " entered; must be an integer but was '" + args.get(key) + "'");
+            return Integer.MIN_VALUE;
+        }
+    }
+    
     @Command(name = "pex",
             syntax = "reload",
             permission = "permissions.manage.reload",
@@ -252,19 +265,6 @@ public class UtilityCommands extends PermissionsCommand {
             sender.sendMessage(debugStatusMessage);
         }
         plugin.getLogger().warning(debugStatusMessage);
-    }
-
-    private static int tryGetInt(CommandSender sender, Map<String, String> args, String key, int def) {
-        if (!args.containsKey(key)) {
-            return def;
-        }
-
-        try {
-            return Integer.parseInt(args.get(key));
-        } catch (NumberFormatException e) {
-            sender.sendMessage(ChatColor.RED + "Invalid " + key + " entered; must be an integer but was '" + args.get(key) + "'");
-            return Integer.MIN_VALUE;
-        }
     }
 
     @Command(name = "pex",

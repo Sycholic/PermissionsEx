@@ -13,10 +13,6 @@ import java.util.Map;
  */
 public class BackendDataTransfer {
 
-    private BackendDataTransfer() {
-        // NO NO NO
-    }
-
     private static void transferBase(PermissionsData from, PermissionsData to) {
         for (Map.Entry<String, List<String>> entry : from.getPermissionsMap().entrySet()) {
             to.setPermissions(entry.getValue(), entry.getKey());
@@ -44,5 +40,9 @@ public class BackendDataTransfer {
 
     public static void transferUser(PermissionsUserData from, PermissionsUserData to) {
         transferBase(from, to);
+    }
+
+    private BackendDataTransfer() {
+        // NO NO NO
     }
 }

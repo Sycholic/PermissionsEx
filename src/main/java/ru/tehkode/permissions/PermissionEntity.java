@@ -39,10 +39,6 @@ public abstract class PermissionEntity {
 
     protected final static String NON_INHERITABLE_PREFIX = "#";
 
-    public static enum Type {
-
-        USER, GROUP;
-    }
 
     protected PermissionManager manager;
     private String name;
@@ -937,5 +933,10 @@ public abstract class PermissionEntity {
 
     public void setParentsIdentifier(List<String> parentNames) {
         setParentsIdentifier(parentNames, null);
+    }
+
+    public static enum Type {
+
+        USER, GROUP
     }
 }

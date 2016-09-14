@@ -24,9 +24,6 @@ public class CraftBukkitInterface {
         }
     }
 
-    private CraftBukkitInterface() {
-    }
-
     /**
      * Get the versioned class name from a class name without the o.b.c prefix.
      *
@@ -60,5 +57,8 @@ public class CraftBukkitInterface {
         } catch (ClassNotFoundException e) {
             return null;
         }
+    }
+
+    private CraftBukkitInterface() {
     }
 }

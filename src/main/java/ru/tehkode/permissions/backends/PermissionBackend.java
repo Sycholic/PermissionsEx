@@ -35,6 +35,155 @@ import java.util.logging.Logger;
  * default marked true. No default group is required to exist.
  */
 public abstract class PermissionBackend {
+    // -- Backend lookup/creation
+    public static final String DEFAULT_BACKEND = "file";
+    /**
+     * Array of backend aliases
+     */
+    private static final Map<String, Class<? extends PermissionBackend>> REGISTERED_ALIASES = new HashMap<>();
+
+    /**
+     * Return class name for alias
+     *
+     * @param alias Alias for backend
+     * @return Class name if found or alias if there is no such class name
+     * present
+     */
+    public static String getBackendClassName(String alias) {
+        if (REGISTERED_ALIASES.containsKey(alias)) {
+            return REGISTERED_ALIASES.get(alias).getName();
+        }
+        
+        return alias;
+    }
+
+    /**
+     * Returns Class object for specified alias, if there is no alias registered
+     * then try to find it using Class.forName(alias)
+     *
+     * @param alias
+     * @return
+     * @throws ClassNotFoundException
+     */
+    public static Class<? extends PermissionBackend> getBackendClass(String alias) throws ClassNotFoundException {
+        if (!REGISTERED_ALIASES.containsKey(alias)) {
+            Class<?> clazz = Class.forName(alias);
+            if (!PermissionBackend.class.isAssignableFrom(clazz)) {
+                throw new IllegalArgumentException("Provided class " + alias + " is not a subclass of PermissionBackend!");
+            }
+            return clazz.asSubclass(PermissionBackend.class);
+        }
+        
+        return REGISTERED_ALIASES.get(alias);
+    }
+
+    /**
+     * Register new alias for specified backend class
+     *
+     * @param alias
+     * @param backendClass
+     */
+    public static void registerBackendAlias(String alias, Class<? extends PermissionBackend> backendClass) {
+        if (!PermissionBackend.class.isAssignableFrom(backendClass)) {
+            throw new IllegalArgumentException("Provided class should be subclass of PermissionBackend"); // This should be enforced at compile time
+        }
+        
+        REGISTERED_ALIASES.put(alias, backendClass);
+        
+        //PermissionsEx.getLogger().info(alias + " backend registered!");
+    }
+
+    /**
+     * Return alias for specified backend class If there is no such class
+     * registered the fullname of this class would be returned using
+     * backendClass.getName();
+     *
+     * @param backendClass
+     * @return alias or class fullname when not found using
+     * backendClass.getName()
+     */
+    public static String getBackendAlias(Class<? extends PermissionBackend> backendClass) {
+        if (REGISTERED_ALIASES.containsValue(backendClass)) {
+            for (String alias : REGISTERED_ALIASES.keySet()) { // Is there better way to find key by value?
+                if (REGISTERED_ALIASES.get(alias).equals(backendClass)) {
+                    return alias;
+                }
+            }
+        }
+        
+        return backendClass.getName();
+    }
+
+    /**
+     * Returns new backend class instance for specified backendName
+     *
+     * @param backendName Class name or alias of backend
+     * @param config Configuration object to access backend settings
+     * @return new instance of PermissionBackend object
+     */
+    public static PermissionBackend getBackend(String backendName, Configuration config) throws PermissionBackendException {
+        return getBackend(backendName, PermissionsEx.getPermissionManager(), config, DEFAULT_BACKEND);
+    }
+
+    /**
+     * Returns new Backend class instance for specified backendName
+     *
+     * @param backendName Class name or alias of backend
+     * @param manager PermissionManager object
+     * @param config Configuration object to access backend settings
+     * @return new instance of PermissionBackend object
+     */
+    public static PermissionBackend getBackend(String backendName, PermissionManager manager, ConfigurationSection config) throws PermissionBackendException {
+        return getBackend(backendName, manager, config, DEFAULT_BACKEND);
+    }
+
+    /**
+     * Returns new Backend class instance for specified backendName
+     *
+     * @param backendName Class name or alias of backend
+     * @param manager PermissionManager object
+     * @param config Configuration object to access backend settings
+     * @param fallBackBackend name of backend that should be used if specified
+     * backend was not found or failed to initialize
+     * @return new instance of PermissionBackend object
+     */
+    public static PermissionBackend getBackend(String backendName, PermissionManager manager, ConfigurationSection config, String fallBackBackend) throws PermissionBackendException {
+        if (backendName == null || backendName.isEmpty()) {
+            backendName = DEFAULT_BACKEND;
+        }
+        
+        String className = getBackendClassName(backendName);
+        
+        try {
+            Class<? extends PermissionBackend> backendClass = getBackendClass(backendName);
+            
+            manager.getLogger().info("Initializing " + backendName + " backend");
+            
+            Constructor<? extends PermissionBackend> constructor = backendClass.getConstructor(PermissionManager.class, ConfigurationSection.class);
+            return constructor.newInstance(manager, config);
+        } catch (ClassNotFoundException e) {
+            
+            manager.getLogger().warning("Specified backend \"" + backendName + "\" is unknown.");
+            
+            if (fallBackBackend == null) {
+                throw new RuntimeException(e);
+            }
+            
+            if (!className.equals(getBackendClassName(fallBackBackend))) {
+                return getBackend(fallBackBackend, manager, config, null);
+            } else {
+                throw new RuntimeException(e);
+            }
+        } catch (Throwable e) {
+            if (e instanceof InvocationTargetException) {
+                e = e.getCause();
+                if (e instanceof PermissionBackendException) {
+                    throw ((PermissionBackendException) e);
+                }
+            }
+            throw new RuntimeException(e);
+        }
+    }
 
     private final PermissionManager manager;
     private final ConfigurationSection backendConfig;
@@ -266,162 +415,12 @@ public abstract class PermissionBackend {
      * @param writer The writer to dump contents to.
      */
     public abstract void writeContents(Writer writer) throws IOException;
-
-    // -- Backend lookup/creation
-    public final static String DEFAULT_BACKEND = "file";
-
-    /**
-     * Array of backend aliases
-     */
-    private static final Map<String, Class<? extends PermissionBackend>> REGISTERED_ALIASES = new HashMap<>();
-
-    /**
-     * Return class name for alias
-     *
-     * @param alias Alias for backend
-     * @return Class name if found or alias if there is no such class name
-     * present
-     */
-    public static String getBackendClassName(String alias) {
-
-        if (REGISTERED_ALIASES.containsKey(alias)) {
-            return REGISTERED_ALIASES.get(alias).getName();
-        }
-
-        return alias;
-    }
-
-    /**
-     * Returns Class object for specified alias, if there is no alias registered
-     * then try to find it using Class.forName(alias)
-     *
-     * @param alias
-     * @return
-     * @throws ClassNotFoundException
-     */
-    public static Class<? extends PermissionBackend> getBackendClass(String alias) throws ClassNotFoundException {
-        if (!REGISTERED_ALIASES.containsKey(alias)) {
-            Class<?> clazz = Class.forName(alias);
-            if (!PermissionBackend.class.isAssignableFrom(clazz)) {
-                throw new IllegalArgumentException("Provided class " + alias + " is not a subclass of PermissionBackend!");
-            }
-            return clazz.asSubclass(PermissionBackend.class);
-        }
-
-        return REGISTERED_ALIASES.get(alias);
-    }
-
-    /**
-     * Register new alias for specified backend class
-     *
-     * @param alias
-     * @param backendClass
-     */
-    public static void registerBackendAlias(String alias, Class<? extends PermissionBackend> backendClass) {
-        if (!PermissionBackend.class.isAssignableFrom(backendClass)) {
-            throw new IllegalArgumentException("Provided class should be subclass of PermissionBackend"); // This should be enforced at compile time
-        }
-
-        REGISTERED_ALIASES.put(alias, backendClass);
-
-        //PermissionsEx.getLogger().info(alias + " backend registered!");
-    }
-
-    /**
-     * Return alias for specified backend class If there is no such class
-     * registered the fullname of this class would be returned using
-     * backendClass.getName();
-     *
-     * @param backendClass
-     * @return alias or class fullname when not found using
-     * backendClass.getName()
-     */
-    public static String getBackendAlias(Class<? extends PermissionBackend> backendClass) {
-        if (REGISTERED_ALIASES.containsValue(backendClass)) {
-            for (String alias : REGISTERED_ALIASES.keySet()) { // Is there better way to find key by value?
-                if (REGISTERED_ALIASES.get(alias).equals(backendClass)) {
-                    return alias;
-                }
-            }
-        }
-
-        return backendClass.getName();
-    }
-
-    /**
-     * Returns new backend class instance for specified backendName
-     *
-     * @param backendName Class name or alias of backend
-     * @param config Configuration object to access backend settings
-     * @return new instance of PermissionBackend object
-     */
-    public static PermissionBackend getBackend(String backendName, Configuration config) throws PermissionBackendException {
-        return getBackend(backendName, PermissionsEx.getPermissionManager(), config, DEFAULT_BACKEND);
-    }
-
-    /**
-     * Returns new Backend class instance for specified backendName
-     *
-     * @param backendName Class name or alias of backend
-     * @param manager PermissionManager object
-     * @param config Configuration object to access backend settings
-     * @return new instance of PermissionBackend object
-     */
-    public static PermissionBackend getBackend(String backendName, PermissionManager manager, ConfigurationSection config) throws PermissionBackendException {
-        return getBackend(backendName, manager, config, DEFAULT_BACKEND);
-    }
-
-    /**
-     * Returns new Backend class instance for specified backendName
-     *
-     * @param backendName Class name or alias of backend
-     * @param manager PermissionManager object
-     * @param config Configuration object to access backend settings
-     * @param fallBackBackend name of backend that should be used if specified
-     * backend was not found or failed to initialize
-     * @return new instance of PermissionBackend object
-     */
-    public static PermissionBackend getBackend(String backendName, PermissionManager manager, ConfigurationSection config, String fallBackBackend) throws PermissionBackendException {
-        if (backendName == null || backendName.isEmpty()) {
-            backendName = DEFAULT_BACKEND;
-        }
-
-        String className = getBackendClassName(backendName);
-
-        try {
-            Class<? extends PermissionBackend> backendClass = getBackendClass(backendName);
-
-            manager.getLogger().info("Initializing " + backendName + " backend");
-
-            Constructor<? extends PermissionBackend> constructor = backendClass.getConstructor(PermissionManager.class, ConfigurationSection.class);
-            return constructor.newInstance(manager, config);
-        } catch (ClassNotFoundException e) {
-
-            manager.getLogger().warning("Specified backend \"" + backendName + "\" is unknown.");
-
-            if (fallBackBackend == null) {
-                throw new RuntimeException(e);
-            }
-
-            if (!className.equals(getBackendClassName(fallBackBackend))) {
-                return getBackend(fallBackBackend, manager, config, null);
-            } else {
-                throw new RuntimeException(e);
-            }
-        } catch (Throwable e) {
-            if (e instanceof InvocationTargetException) {
-                e = e.getCause();
-                if (e instanceof PermissionBackendException) {
-                    throw ((PermissionBackendException) e);
-                }
-            }
-            throw new RuntimeException(e);
-        }
-    }
-
+    
+    
     @Override
     public String toString() {
         return getClass().getSimpleName() + "{config=" + getConfig().getName() + "}";
     }
+
 
 }

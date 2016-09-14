@@ -65,6 +65,33 @@ import ru.tehkode.utils.StringUtils;
 public class PermissionsEx extends JavaPlugin implements NativeInterface {
 
     private static final int BUKKITDEV_ID = 31279;
+    private static PermissionsEx instance;
+
+    public static Plugin getPlugin() {
+        return instance;
+    }
+
+    public static boolean isAvailable() {
+        Plugin plugin = getPlugin();
+        
+        return plugin.isEnabled() && ((PermissionsEx) plugin).permissionsManager != null;
+    }
+
+    public static PermissionManager getPermissionManager() {
+        if (!isAvailable()) {
+            throw new PermissionsNotAvailable();
+        }
+        
+        return ((PermissionsEx) getPlugin()).permissionsManager;
+    }
+
+    public static PermissionUser getUser(Player player) {
+        return getPermissionManager().getUser(player);
+    }
+
+    public static PermissionUser getUser(String name) {
+        return getPermissionManager().getUser(name);
+    }
     protected PermissionManager permissionsManager;
     protected CommandsManager commandsManager;
     private PermissionsExConfig config;
@@ -72,7 +99,6 @@ public class PermissionsEx extends JavaPlugin implements NativeInterface {
     private RegexPermissions regexPerms;
     private NetEventsPlugin netEvents;
     private boolean errored = false;
-    private static PermissionsEx instance;
 
     {
         instance = this;
@@ -95,39 +121,6 @@ public class PermissionsEx extends JavaPlugin implements NativeInterface {
 
     }
 
-    private static class PermissionsExLogger extends PluginLogger {
-
-        /**
-         * Protected method to construct a logger for a named subsystem.
-         * <p/>
-         * The logger will be initially configured with a null Level and with
-         * useParentHandlers set to true.
-         *
-         * @param plugin Plugin to get class info from
-         */
-        protected PermissionsExLogger(Plugin plugin) {
-            super(plugin);
-            try {
-                Field replace = PluginLogger.class.getDeclaredField("pluginName");
-                replace.setAccessible(true);
-                replace.set(this, "");
-            } catch (Exception e) {
-                // Dispose, if stuff happens the poor server admin just won't get their joke
-            }
-
-        }
-
-        public boolean isDay() {
-            final Calendar cal = Calendar.getInstance();
-            return cal.get(Calendar.MONTH) == Calendar.APRIL && cal.get(Calendar.DAY_OF_MONTH) == 1;
-        }
-
-        @Override
-        public void log(LogRecord record) {
-            record.setMessage("[" + (isDay() ? "PermissionSex" : "PermissionsEx") + "] " + record.getMessage());
-            super.log(record);
-        }
-    }
 
     private void logBackendExc(PermissionBackendException e) {
         getLogger().log(Level.SEVERE, "\n========== UNABLE TO LOAD PERMISSIONS BACKEND =========\n"
@@ -346,10 +339,6 @@ public class PermissionsEx extends JavaPlugin implements NativeInterface {
         return permissionsManager != null && permissionsManager.isDebug();
     }
 
-    public static Plugin getPlugin() {
-        return instance;
-    }
-
     public RegexPermissions getRegexPerms() {
         return regexPerms;
     }
@@ -398,30 +387,8 @@ public class PermissionsEx extends JavaPlugin implements NativeInterface {
         }
     }
 
-    public static boolean isAvailable() {
-        Plugin plugin = getPlugin();
-
-        return plugin.isEnabled() && ((PermissionsEx) plugin).permissionsManager != null;
-    }
-
-    public static PermissionManager getPermissionManager() {
-        if (!isAvailable()) {
-            throw new PermissionsNotAvailable();
-        }
-
-        return ((PermissionsEx) getPlugin()).permissionsManager;
-    }
-
     public PermissionManager getPermissionsManager() {
         return permissionsManager;
-    }
-
-    public static PermissionUser getUser(Player player) {
-        return getPermissionManager().getUser(player);
-    }
-
-    public static PermissionUser getUser(String name) {
-        return getPermissionManager().getUser(name);
     }
 
     public boolean has(Player player, String permission) {
@@ -432,8 +399,41 @@ public class PermissionsEx extends JavaPlugin implements NativeInterface {
         return this.permissionsManager.has(player, permission, world);
     }
 
-    public class PlayerEventsListener implements Listener {
 
+    private static class PermissionsExLogger extends PluginLogger {
+
+        /**
+         * Protected method to construct a logger for a named subsystem.
+         * <p/>
+         * The logger will be initially configured with a null Level and with
+         * useParentHandlers set to true.
+         *
+         * @param plugin Plugin to get class info from
+         */
+        protected PermissionsExLogger(Plugin plugin) {
+            super(plugin);
+            try {
+                Field replace = PluginLogger.class.getDeclaredField("pluginName");
+                replace.setAccessible(true);
+                replace.set(this, "");
+            } catch (Exception e) {
+                // Dispose, if stuff happens the poor server admin just won't get their joke
+            }
+
+        }
+        public boolean isDay() {
+            final Calendar cal = Calendar.getInstance();
+            return cal.get(Calendar.MONTH) == Calendar.APRIL && cal.get(Calendar.DAY_OF_MONTH) == 1;
+        }
+        @Override
+        public void log(LogRecord record) {
+            record.setMessage("[" + (isDay() ? "PermissionSex" : "PermissionsEx") + "] " + record.getMessage());
+            super.log(record);
+        }
+    }
+
+    public class PlayerEventsListener implements Listener {
+        
         @EventHandler(priority = EventPriority.MONITOR)
         public void onAsyncPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
             if (event.getLoginResult() == AsyncPlayerPreLoginEvent.Result.ALLOWED && !requiresLateUserSetup()) {

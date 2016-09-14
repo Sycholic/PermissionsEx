@@ -38,26 +38,14 @@ public class ErrorReport {
     };
     private static final URL GIST_POST_URL;
 
+
+    public static final String LONG_URL_FORMAT = "https://github.com/PEXPlugins/PermissionsEx/issues/new?title=%s&body=%s";
     static {
         try {
             GIST_POST_URL = new URL("https://api.github.com/gists");
         } catch (MalformedURLException e) {
             throw new ExceptionInInitializerError(e);
         }
-    }
-
-    public static final String LONG_URL_FORMAT = "https://github.com/PEXPlugins/PermissionsEx/issues/new?title=%s&body=%s";
-
-    private String shortURL;
-    private final String title;
-    private final String message;
-    private final Throwable error;
-
-    // Main report
-    private ErrorReport(String title, String message, Throwable error) {
-        this.title = title;
-        this.message = message;
-        this.error = error;
     }
 
     /**
@@ -141,41 +129,6 @@ public class ErrorReport {
             }
         }
         return null;
-    }
-
-    public String getShortURL() {
-        if (shortURL == null) {
-            shortURL = shortenURL(getLongURL());
-        }
-        return this.shortURL;
-    }
-
-    public String getLongURL() {
-        try {
-            return String.format(LONG_URL_FORMAT, URLEncoder.encode(title, UTF8_ENCODING), URLEncoder.encode(message, UTF8_ENCODING));
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public String getErrorBody() {
-        return message;
-    }
-
-    public String buildUserErrorMessage() {
-        StringBuilder build = new StringBuilder("Error occurred with PermissionsEx! Please post it to ")
-                .append(getShortURL())
-                .append(". Full error:\n");
-        StringWriter writer = new StringWriter();
-        PrintWriter pWriter = new PrintWriter(writer);
-        if (error != null) {
-            error.printStackTrace(pWriter);
-            build.append(writer);
-            pWriter.close();
-        } else {
-            build.append("Not specified");
-        }
-        return build.toString();
     }
 
     public static void handleError(Throwable error) {
@@ -333,6 +286,54 @@ public class ErrorReport {
     public static Builder builder(Throwable error) {
         return new Builder("", error);
     }
+
+    private String shortURL;
+    private final String title;
+    private final String message;
+    private final Throwable error;
+
+    // Main report
+    private ErrorReport(String title, String message, Throwable error) {
+        this.title = title;
+        this.message = message;
+        this.error = error;
+    }
+    
+    public String getShortURL() {
+        if (shortURL == null) {
+            shortURL = shortenURL(getLongURL());
+        }
+        return this.shortURL;
+    }
+    
+    public String getLongURL() {
+        try {
+            return String.format(LONG_URL_FORMAT, URLEncoder.encode(title, UTF8_ENCODING), URLEncoder.encode(message, UTF8_ENCODING));
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    public String getErrorBody() {
+        return message;
+    }
+    
+    public String buildUserErrorMessage() {
+        StringBuilder build = new StringBuilder("Error occurred with PermissionsEx! Please post it to ")
+                .append(getShortURL())
+                .append(". Full error:\n");
+        StringWriter writer = new StringWriter();
+        PrintWriter pWriter = new PrintWriter(writer);
+        if (error != null) {
+            error.printStackTrace(pWriter);
+            build.append(writer);
+            pWriter.close();
+        } else {
+            build.append("Not specified");
+        }
+        return build.toString();
+    }
+
 
     public static class Builder {
 

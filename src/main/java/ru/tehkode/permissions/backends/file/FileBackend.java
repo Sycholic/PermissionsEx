@@ -41,6 +41,29 @@ import java.util.concurrent.ConcurrentHashMap;
 public class FileBackend extends PermissionBackend {
 
     public final static char PATH_SEPARATOR = '/';
+
+    public static String buildPath(String... path) {
+        StringBuilder builder = new StringBuilder();
+        
+        boolean first = true;
+        char separator = PATH_SEPARATOR; //permissions.options().pathSeparator();
+        
+        for (String node : path) {
+            if (node.isEmpty()) {
+                continue;
+            }
+            
+            if (!first) {
+                builder.append(separator);
+            }
+            
+            builder.append(node);
+            
+            first = false;
+        }
+        
+        return builder.toString();
+    }
     public FileConfig permissions;
     public File permissionsFile;
     private final Map<String, List<String>> worldInheritanceCache = new ConcurrentHashMap<>();
@@ -279,29 +302,6 @@ public class FileBackend extends PermissionBackend {
         }
     }
 
-    public static String buildPath(String... path) {
-        StringBuilder builder = new StringBuilder();
-
-        boolean first = true;
-        char separator = PATH_SEPARATOR; //permissions.options().pathSeparator();
-
-        for (String node : path) {
-            if (node.isEmpty()) {
-                continue;
-            }
-
-            if (!first) {
-                builder.append(separator);
-            }
-
-            builder.append(node);
-
-            first = false;
-        }
-
-        return builder.toString();
-    }
-
     @Override
     public void reload() throws PermissionBackendException {
         FileConfig newPermissions = new FileConfig(permissionsFile, new Object(), "users");
@@ -381,4 +381,5 @@ public class FileBackend extends PermissionBackend {
             getManager().getLogger().severe("Error while saving permissions file: " + e.getMessage());
         }
     }
+
 }
