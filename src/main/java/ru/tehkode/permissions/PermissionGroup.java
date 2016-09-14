@@ -21,6 +21,7 @@ package ru.tehkode.permissions;
 import ru.tehkode.permissions.events.PermissionEntityEvent;
 
 import java.util.*;
+import java.util.logging.Level;
 
 /**
  * @author t3hk0d3
@@ -46,7 +47,7 @@ public class PermissionGroup extends PermissionEntity implements Comparable<Perm
         super.initialize();
 
         if (this.isDebug()) {
-            manager.getLogger().info("Group " + this.getIdentifier() + " initialized");
+            manager.getLogger().log(Level.INFO, "Group {0} initialized", this.getIdentifier());
         }
     }
 

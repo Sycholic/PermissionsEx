@@ -215,7 +215,7 @@ public class UtilityCommands extends PermissionsCommand {
                 }
                 if (splitIdentifiers.hasNext()) {
                     plugin.getPermissionsManager().getExecutor().schedule(this, 10, TimeUnit.MINUTES);
-                    plugin.getLogger().info("Completed conversion batch " + batchNum.getAndIncrement() + " of " + (int) Math.ceil(userIdentifiers.size() / 50000.0));
+                    plugin.getLogger().log(Level.INFO, "Completed conversion batch {0} of {1}", new Object[]{batchNum.getAndIncrement(), (int) Math.ceil(userIdentifiers.size() / 50000.0)});
                 } else {
                     plugin.getLogger().info("UUID conversion complete");
                     if (!(sender instanceof Player) || ((Player) sender).isOnline()) {
@@ -243,7 +243,7 @@ public class UtilityCommands extends PermissionsCommand {
                 sender.sendMessage(ChatColor.RED + "Specified backend not found!");
             } else {
                 sender.sendMessage(ChatColor.RED + "Error: " + e.getMessage());
-                plugin.getLogger().severe("Error: " + e.getMessage());
+                plugin.getLogger().log(Level.SEVERE, "Error: {0}", e.getMessage());
                 e.printStackTrace();
             }
         } catch (PermissionBackendException e) {

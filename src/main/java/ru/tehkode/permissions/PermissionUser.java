@@ -72,7 +72,7 @@ public class PermissionUser extends PermissionEntity {
         updateTimedGroups();
 
         if (this.isDebug()) {
-            manager.getLogger().info("User " + this.getIdentifier() + " initialized");
+            manager.getLogger().log(Level.INFO, "User {0} initialized", this.getIdentifier());
         }
     }
 

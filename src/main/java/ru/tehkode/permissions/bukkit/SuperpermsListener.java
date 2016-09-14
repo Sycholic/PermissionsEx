@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
 
 /**
  * PEX permissions database integration with superperms
@@ -54,7 +55,7 @@ public class SuperpermsListener implements Listener {
         PermissionUser user = plugin.getPermissionsManager().getUser(player);
         if (user != null) {
             if (user.isDebug()) {
-                plugin.getLogger().info("Updating superperms for player " + player.getName());
+                plugin.getLogger().log(Level.INFO, "Updating superperms for player {0}", player.getName());
             }
             updatePlayerPermission(playerPerm, user, worldName);
             updatePlayerMetadata(playerOptionPerm, user, worldName);
@@ -209,7 +210,7 @@ public class SuperpermsListener implements Listener {
                 case PERMISSIONS_CHANGED:
                 case TIMEDPERMISSION_EXPIRED:
                     if (user.isDebug()) {
-                        plugin.getLogger().info("Updating superperms permissions for player " + p.getName());
+                        plugin.getLogger().log(Level.INFO, "Updating superperms permissions for player {0}", p.getName());
                     }
                     updatePlayerPermission(getCreateWrapper(p, ""), user, p.getWorld().getName());
                     p.recalculatePermissions();
@@ -218,7 +219,7 @@ public class SuperpermsListener implements Listener {
                 case OPTIONS_CHANGED:
                 case INFO_CHANGED:
                     if (user.isDebug()) {
-                        plugin.getLogger().info("Updating superperms metadata for player " + p.getName());
+                        plugin.getLogger().log(Level.INFO, "Updating superperms metadata for player {0}", p.getName());
                     }
                     updatePlayerMetadata(getCreateWrapper(p, ".options"), user, p.getWorld().getName());
                     p.recalculatePermissions();

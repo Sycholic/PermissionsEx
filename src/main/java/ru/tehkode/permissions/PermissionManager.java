@@ -35,6 +35,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -221,7 +222,7 @@ public class PermissionManager {
             if (fallbackName != null) {
                 if (data.isVirtual() && backend.hasUser(fallbackName)) {
                     if (isDebug()) {
-                        getLogger().info("Converting user " + fallbackName + " (UUID " + identifier + ") to UUID-based storage");
+                        getLogger().log(Level.INFO, "Converting user {0} (UUID {1}) to UUID-based storage", new Object[]{fallbackName, identifier});
                     }
 
                     PermissionsUserData oldData = backend.getUserData(fallbackName);

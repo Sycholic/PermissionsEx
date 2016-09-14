@@ -26,6 +26,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -160,13 +161,13 @@ public abstract class PermissionBackend {
         try {
             Class<? extends PermissionBackend> backendClass = getBackendClass(backendName);
             
-            manager.getLogger().info("Initializing " + backendName + " backend");
+            manager.getLogger().log(Level.INFO, "Initializing {0} backend", backendName);
             
             Constructor<? extends PermissionBackend> constructor = backendClass.getConstructor(PermissionManager.class, ConfigurationSection.class);
             return constructor.newInstance(manager, config);
         } catch (ClassNotFoundException e) {
             
-            manager.getLogger().warning("Specified backend \"" + backendName + "\" is unknown.");
+            manager.getLogger().log(Level.WARNING, "Specified backend \"{0}\" is unknown.", backendName);
             
             if (fallBackBackend == null) {
                 throw new RuntimeException(e);

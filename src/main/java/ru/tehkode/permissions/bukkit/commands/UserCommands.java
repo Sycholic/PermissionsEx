@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -415,8 +416,7 @@ public class UserCommands extends PermissionsCommand {
         sender.sendMessage(ChatColor.WHITE + "Timed permission \"" + permission + "\" added!");
         this.informPlayer(plugin, user, "Your permissions have been changed!");
 
-        plugin.getLogger().info("User \"" + userName + "\" get timed permission \"" + args.get("permission") + "\" "
-                + (lifetime > 0 ? "for " + lifetime + " seconds " : " ") + "from " + sender.getName());
+        plugin.getLogger().log(Level.INFO, "User \"{0}\" get timed permission \"{1}\" {2}from {3}", new Object[]{userName, args.get("permission"), lifetime > 0 ? "for " + lifetime + " seconds " : " ", sender.getName()});
     }
 
     @Command(name = "pex",

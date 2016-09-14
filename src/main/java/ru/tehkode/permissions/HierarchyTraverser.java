@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
 
 /**
  * Class created to simplify hierarchy traversal for entities
@@ -48,7 +49,7 @@ public abstract class HierarchyTraverser<Return> {
             // Circular inheritance detection
             if (visited.contains(current)) {
                 if (current.isDebug()) {
-                    current.manager.getLogger().warning("Potential circular inheritance detected involving group " + current.getIdentifier() + " (when performing traversal for entity " + start + ")");
+                    current.manager.getLogger().log(Level.WARNING, "Potential circular inheritance detected involving group {0} (when performing traversal for entity {1})", new Object[]{current.getIdentifier(), start});
                 }
                 continue;
             }
@@ -100,7 +101,7 @@ public abstract class HierarchyTraverser<Return> {
                 String current = worlds.removeFirst();
                 if (visitedWorlds.contains(current)) {
                     if (entity.isDebug()) {
-                        entity.manager.getLogger().warning("Potential circular inheritance detected with world inheritance for world " + current);
+                        entity.manager.getLogger().log(Level.WARNING, "Potential circular inheritance detected with world inheritance for world {0}", current);
                     }
                     continue;
                 }

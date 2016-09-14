@@ -19,6 +19,7 @@
 package ru.tehkode.permissions.bukkit.commands;
 
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -105,10 +106,10 @@ public class PromotionCommands extends PermissionsCommand {
 
             this.informPlayer(plugin, user, "You have been promoted on " + targetGroup.getRankLadder() + " ladder to " + targetGroup.getIdentifier() + " group");
             sender.sendMessage("User " + describeUser(user) + " promoted to " + targetGroup.getIdentifier() + " group");
-            plugin.getLogger().info("User " + describeUser(user) + " has been promoted to " + targetGroup.getIdentifier() + " group on " + targetGroup.getRankLadder() + " ladder by " + promoterName);
+            plugin.getLogger().log(Level.INFO, "User {0} has been promoted to {1} group on {2} ladder by {3}", new Object[]{describeUser(user), targetGroup.getIdentifier(), targetGroup.getRankLadder(), promoterName});
         } catch (RankingException e) {
             sender.sendMessage(ChatColor.RED + "Promotion error: " + e.getMessage());
-            plugin.getLogger().severe("Ranking Error (" + promoterName + " > " + describeUser(e.getTarget()) + "): " + e.getMessage());
+            plugin.getLogger().log(Level.SEVERE, "Ranking Error ({0} > {1}): {2}", new Object[]{promoterName, describeUser(e.getTarget()), e.getMessage()});
         }
     }
 
@@ -149,10 +150,10 @@ public class PromotionCommands extends PermissionsCommand {
 
             this.informPlayer(plugin, user, "You have been demoted on " + targetGroup.getRankLadder() + " ladder to " + targetGroup.getIdentifier() + " group");
             sender.sendMessage("User " + describeUser(user) + " demoted to " + targetGroup.getIdentifier() + " group");
-            plugin.getLogger().info("User " + describeUser(user) + " has been demoted to " + targetGroup.getIdentifier() + " group on " + targetGroup.getRankLadder() + " ladder by " + demoterName);
+            plugin.getLogger().log(Level.INFO, "User {0} has been demoted to {1} group on {2} ladder by {3}", new Object[]{describeUser(user), targetGroup.getIdentifier(), targetGroup.getRankLadder(), demoterName});
         } catch (RankingException e) {
             sender.sendMessage(ChatColor.RED + "Demotion error: " + e.getMessage());
-            plugin.getLogger().severe("Ranking Error (" + demoterName + " demotes " + describeUser(e.getTarget()) + "): " + e.getMessage());
+            plugin.getLogger().log(Level.SEVERE, "Ranking Error ({0} demotes {1}): {2}", new Object[]{demoterName, describeUser(e.getTarget()), e.getMessage()});
         }
     }
 

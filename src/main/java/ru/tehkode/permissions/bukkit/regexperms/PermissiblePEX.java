@@ -42,6 +42,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Level;
 
 /**
  * Implements regex-based permission matching for superperms. If a permission
@@ -138,7 +139,7 @@ public class PermissiblePEX extends PermissibleBase {
                 if (super.isPermissionSet(permission)) {
                     final boolean ret = super.hasPermission(permission);
                     if (isDebug()) {
-                        plugin.getLogger().info("User " + player.getName() + " checked for permission '" + permission + "', superperms-matched a value of " + ret);
+                        plugin.getLogger().log(Level.INFO, "User {0} checked for permission ''{1}'', superperms-matched a value of {2}", new Object[]{player.getName(), permission, ret});
                     }
                     return ret;
                 } else {
@@ -161,7 +162,7 @@ public class PermissiblePEX extends PermissibleBase {
                 if (super.isPermissionSet(permission.getName())) {
                     final boolean ret = super.hasPermission(permission);
                     if (isDebug()) {
-                        plugin.getLogger().info("User " + player.getName() + " checked for permission '" + permission.getName() + "', superperms-matched a value of " + ret);
+                        plugin.getLogger().log(Level.INFO, "User {0} checked for permission ''{1}'', superperms-matched a value of {2}", new Object[]{player.getName(), permission.getName(), ret});
                     }
                     return ret;
                 } else {
@@ -215,9 +216,7 @@ public class PermissiblePEX extends PermissibleBase {
         if (plugin.getPermissionsManager().getPermissionMatcher().isMatches(expression, permission)) {
             PermissionCheckResult res = PermissionCheckResult.fromBoolean(value);
             if (isDebug()) {
-                plugin.getLogger().info("User " + player.getName()
-                        + " checked for permission '" + permission + "', regex-matched a value of "
-                        + res + " from " + expression + " (CACHE MISS)");
+                plugin.getLogger().log(Level.INFO, "User {0} checked for permission ''{1}'', regex-matched a value of {2} from {3} (CACHE MISS)", new Object[]{player.getName(), permission, res, expression});
             }
             return res;
         }
@@ -231,7 +230,7 @@ public class PermissiblePEX extends PermissibleBase {
             PermissionCheckResult res = cache.get(permission);
             if (res != null) {
                 if (isDebug()) {
-                    plugin.getLogger().info("User " + player.getName() + " checked for permission '" + permission + "', regex-matched a value of " + res + " from cache.");
+                    plugin.getLogger().log(Level.INFO, "User {0} checked for permission ''{1}'', regex-matched a value of {2} from cache.", new Object[]{player.getName(), permission, res});
                 }
                 return res;
             }
@@ -250,7 +249,7 @@ public class PermissiblePEX extends PermissibleBase {
                     if ((res = permissionValue(ent.getKey())) != PermissionCheckResult.UNDEFINED) {
                         res = PermissionCheckResult.fromBoolean(!(res.toBoolean() ^ ent.getValue()));
                         if (isDebug()) {
-                            plugin.getLogger().info("User " + player.getName() + " checked for permission '" + permission + "', match from parent '" + ent.getKey() + "' (CACHE MISS)");
+                            plugin.getLogger().log(Level.INFO, "User {0} checked for permission ''{1}'', match from parent ''{2}'' (CACHE MISS)", new Object[]{player.getName(), permission, ent.getKey()});
                         }
                         break;
                     }
@@ -258,7 +257,7 @@ public class PermissiblePEX extends PermissibleBase {
             }
             cache.put(permission, res);
             if (res == PermissionCheckResult.UNDEFINED && isDebug()) {
-                plugin.getLogger().info("User " + player.getName() + " checked for permission '" + permission + "', no match found (CACHE MISS)");
+                plugin.getLogger().log(Level.INFO, "User {0} checked for permission ''{1}'', no match found (CACHE MISS)", new Object[]{player.getName(), permission});
             }
             LAST_CALL_ERRORED.set(false);
             return res;

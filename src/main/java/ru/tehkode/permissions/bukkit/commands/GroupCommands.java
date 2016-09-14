@@ -31,6 +31,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 
 public class GroupCommands extends PermissionsCommand {
 
@@ -542,8 +543,7 @@ public class GroupCommands extends PermissionsCommand {
         sender.sendMessage(ChatColor.WHITE + "Timed permission added!");
         this.informGroup(plugin, group, "Your permissions have been changed!");
 
-        plugin.getLogger().info("Group " + groupName + " get timed permission \"" + args.get("permission") + "\" "
-                + (lifetime > 0 ? "for " + lifetime + " seconds " : " ") + "from " + sender.getName());
+        plugin.getLogger().log(Level.INFO, "Group {0} get timed permission \"{1}\" {2}from {3}", new Object[]{groupName, args.get("permission"), lifetime > 0 ? "for " + lifetime + " seconds " : " ", sender.getName()});
     }
 
     @Command(name = "pex",

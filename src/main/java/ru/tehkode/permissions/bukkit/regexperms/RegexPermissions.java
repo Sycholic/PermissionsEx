@@ -77,13 +77,13 @@ public class RegexPermissions {
             if (!found) {
                 plugin.getLogger().warning("No Permissible injector found for your server implementation!");
             } else if (!success) {
-                plugin.getLogger().warning("Unable to inject PEX's permissible for " + player.getName());
+                plugin.getLogger().log(Level.WARNING, "Unable to inject PEX''s permissible for {0}", player.getName());
             }
 
             permissible.recalculatePermissions();
 
             if (success && hasDebugMode()) {
-                plugin.getLogger().info("Permissions handler for " + player.getName() + " successfully injected");
+                plugin.getLogger().log(Level.INFO, "Permissions handler for {0} successfully injected", player.getName());
             }
         } catch (Throwable e) {
             plugin.getLogger().log(Level.SEVERE, "Unable to inject permissible for " + player.getName(), e);
@@ -115,9 +115,9 @@ public class RegexPermissions {
             }
 
             if (!success) {
-                plugin.getLogger().warning("No Permissible injector found for your server implementation (while uninjecting for " + player.getName() + "!");
+                plugin.getLogger().log(Level.WARNING, "No Permissible injector found for your server implementation (while uninjecting for {0}!", player.getName());
             } else if (hasDebugMode()) {
-                plugin.getLogger().info("Permissions handler for " + player.getName() + " successfully uninjected");
+                plugin.getLogger().log(Level.INFO, "Permissions handler for {0} successfully uninjected", player.getName());
             }
         } catch (Throwable e) {
             e.printStackTrace();
