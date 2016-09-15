@@ -35,7 +35,9 @@ import java.util.logging.Level;
 public class PermissionUser extends PermissionEntity {
 
     private final static String PERMISSION_NOT_FOUND = "<not found>"; // used replace null for ConcurrentHashMap
-
+    private static final String[] EMPTY_STRING_ARRAY = new String[0];
+    private static final PermissionGroup[] EMPTY_PERMISSION_ARRAY = new PermissionGroup[0];
+    
     static String getTimedGroupName(String option) {
         if (!option.startsWith("group-") && !option.endsWith("-until")) {
             return null;
@@ -637,12 +639,13 @@ public class PermissionUser extends PermissionEntity {
 
     // Compatibility methods
     @Deprecated
-public String[] getGroupsNames() {
-    return getGroupsNames(null);
-}
+    public String[] getGroupsNames() {
+        return getGroupsNames(null);
+    }
+
     @Deprecated
     public String[] getGroupsNames(String world) {
-        return getParentIdentifiers(world).toArray(new String[0]);
+        return getParentIdentifiers().toArray(EMPTY_STRING_ARRAY);
     }
 
     /**
@@ -652,7 +655,7 @@ public String[] getGroupsNames() {
      */
     @Deprecated
     public PermissionGroup[] getGroups() {
-        return getParents().toArray(new PermissionGroup[0]);
+        return getParents().toArray(EMPTY_PERMISSION_ARRAY);
     }
 
     /**
@@ -663,7 +666,7 @@ public String[] getGroupsNames() {
      */
     @Deprecated
     public PermissionGroup[] getGroups(String worldName) {
-        return getParents(worldName).toArray(new PermissionGroup[0]);
+        return getParents(worldName).toArray(EMPTY_PERMISSION_ARRAY);
     }
 
     /**
@@ -673,7 +676,7 @@ public String[] getGroupsNames() {
      */
     @Deprecated
     public String[] getGroupNames() {
-        return getParentIdentifiers().toArray(new String[0]);
+        return getParentIdentifiers().toArray(EMPTY_STRING_ARRAY);
     }
 
     /**
@@ -684,7 +687,7 @@ public String[] getGroupsNames() {
      */
     @Deprecated
     public String[] getGroupNames(String worldName) {
-        return getParentIdentifiers(worldName).toArray(new String[0]);
+        return getParentIdentifiers(worldName).toArray(EMPTY_STRING_ARRAY);
     }
 
     /**

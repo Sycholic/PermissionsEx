@@ -131,7 +131,7 @@ public abstract class PermissionsCommand implements CommandListener {
         }
 
         if (players.size() > 1) {
-            throw new AutoCompleteChoicesException(players.toArray(new String[0]), argName);
+            throw new AutoCompleteChoicesException(players.toArray(new String[players.size()]), argName);
         } else if (players.size() == 1) {
             return players.get(0);
         }
@@ -167,7 +167,7 @@ public abstract class PermissionsCommand implements CommandListener {
         }
 
         if (groups.size() > 1) { // Found several choices
-            throw new AutoCompleteChoicesException(groups.toArray(new String[0]), argName);
+            throw new AutoCompleteChoicesException(groups.toArray(new String[groups.size()]), argName);
         } else if (groups.size() == 1) { // Found one name
             return groups.get(0);
         }
@@ -198,7 +198,7 @@ public abstract class PermissionsCommand implements CommandListener {
         }
 
         if (worlds.size() > 1) { // Found several choices
-            throw new AutoCompleteChoicesException(worlds.toArray(new String[0]), argName);
+            throw new AutoCompleteChoicesException(worlds.toArray(new String[worlds.size()]), argName);
         } else if (worlds.size() == 1) { // Found one name
             return worlds.get(0);
         }
@@ -241,7 +241,7 @@ public abstract class PermissionsCommand implements CommandListener {
         }
 
         if (permissions.size() > 0) {
-            String[] permissionArray = permissions.toArray(new String[0]);
+            String[] permissionArray = permissions.toArray(new String[permissions.size()]);
 
             if (permissionArray.length == 1) {
                 return permissionArray[0];

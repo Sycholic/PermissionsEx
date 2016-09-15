@@ -44,6 +44,7 @@ import java.util.logging.Logger;
 public class PermissionManager {
 
     public final static int TRANSIENT_PERMISSION = 0;
+    private static final PermissionGroup[] EMPTY_PERMISSION_ARRAY = new PermissionGroup[0];
     private static final Logger logger = Logger.getLogger(ru.tehkode.permissions.bukkit.PermissionsEx.class.getName());
     protected ConcurrentMap<String, PermissionUser> users = new ConcurrentHashMap<>();
     protected ConcurrentMap<String, PermissionGroup> groups = new ConcurrentHashMap<>();
@@ -440,7 +441,7 @@ public class PermissionManager {
 
     @Deprecated
     public PermissionGroup[] getGroups() {
-        return getGroupList().toArray(new PermissionGroup[0]);
+        return getGroupList().toArray(EMPTY_PERMISSION_ARRAY);
     }
 
     /**

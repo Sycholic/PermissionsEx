@@ -45,24 +45,24 @@ public class FileBackend extends PermissionBackend {
 
     public static String buildPath(String... path) {
         StringBuilder builder = new StringBuilder();
-        
+
         boolean first = true;
         char separator = PATH_SEPARATOR; //permissions.options().pathSeparator();
-        
+
         for (String node : path) {
             if (node.isEmpty()) {
                 continue;
             }
-            
+
             if (!first) {
                 builder.append(separator);
             }
-            
+
             builder.append(node);
-            
+
             first = false;
         }
-        
+
         return builder.toString();
     }
     public FileConfig permissions;

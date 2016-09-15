@@ -31,6 +31,7 @@ public class PermissionGroup extends PermissionEntity implements Comparable<Perm
     protected int weight = 0;
     protected boolean dirtyWeight = true;
     private final PermissionsGroupData data;
+    private static final String[] EMPTY_STRING_ARRAY = new String[0];
 
     public PermissionGroup(String groupName, PermissionsGroupData data, PermissionManager manager) {
         super(groupName, manager);
@@ -320,12 +321,12 @@ public class PermissionGroup extends PermissionEntity implements Comparable<Perm
      */
     @Deprecated
     public String[] getParentGroupsNames(String worldName) {
-        return getParentIdentifiers(worldName).toArray(new String[0]);
+        return getParentIdentifiers().toArray(EMPTY_STRING_ARRAY);
     }
 
     @Deprecated
     public String[] getParentGroupsNames() {
-        return getParentIdentifiers().toArray(new String[0]);
+        return getParentIdentifiers().toArray(EMPTY_STRING_ARRAY);
     }
 
     /**

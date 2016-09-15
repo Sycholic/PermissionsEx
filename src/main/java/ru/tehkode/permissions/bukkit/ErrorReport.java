@@ -185,7 +185,7 @@ public class ErrorReport {
                     if (plugin.isEnabled()) {
                         pluginList.append(plugin.getDescription().getName() + " *v" + plugin.getDescription().getVersion() + "*");
                     } else {
-                        pluginList.append("~~").append(plugin.getDescription().getName() + " *v" + plugin.getDescription().getVersion() + "*").append("~~");
+                        pluginList.append("~~").append(plugin.getDescription().getName()).append(" *v").append(plugin.getDescription().getVersion()).append("*").append("~~");
                     }
                 } else {
                     pluginList.append("Unknown Plugin!");
