@@ -210,7 +210,7 @@ public abstract class PermissionEntity {
         String expression = getMatchingExpression(permission, world);
 
         if (this.isDebug()) {
-            manager.getLogger().log(Level.INFO, "User {0} checked for \"{1}\", {2}", new Object[]{this.getIdentifier(), permission, expression == null ? "no permission found" : "\"" + expression + "\" found"});
+            manager.getLogger().log(Level.INFO, "User {0} checked for \"{1}\", {2}", new Object[]{this.getName(), permission, expression == null ? "no permission found" : "\"" + expression + "\" found"});
         }
 
         return explainExpression(expression);

@@ -44,12 +44,12 @@ import java.util.logging.Logger;
 public class PermissionManager {
 
     public final static int TRANSIENT_PERMISSION = 0;
+    private static final Logger logger = Logger.getLogger(ru.tehkode.permissions.bukkit.PermissionsEx.class.getName());
     protected ConcurrentMap<String, PermissionUser> users = new ConcurrentHashMap<>();
     protected ConcurrentMap<String, PermissionGroup> groups = new ConcurrentHashMap<>();
     protected PermissionBackend backend = null;
     private final PermissionsExConfig config;
     private final NativeInterface nativeI;
-    private final Logger logger;
     protected ScheduledExecutorService executor;
     private final Map<String, ScheduledFuture<?>> clearTimedGroupsTasks = new HashMap<>();
     protected boolean debugMode = false;
@@ -58,9 +58,8 @@ public class PermissionManager {
 
     protected PermissionMatcher matcher = new RegExpMatcher();
 
-    public PermissionManager(PermissionsExConfig config, Logger logger, NativeInterface nativeI) throws PermissionBackendException {
+    public PermissionManager(PermissionsExConfig config, NativeInterface nativeI) throws PermissionBackendException {
         this.config = config;
-        this.logger = logger;
         this.nativeI = nativeI;
         this.debugMode = config.isDebug();
         this.allowOps = config.allowOps();
@@ -222,7 +221,7 @@ public class PermissionManager {
             if (fallbackName != null) {
                 if (data.isVirtual() && backend.hasUser(fallbackName)) {
                     if (isDebug()) {
-                        getLogger().log(Level.INFO, "Converting user {0} (UUID {1}) to UUID-based storage", new Object[]{fallbackName, identifier});
+                        logger.log(Level.INFO, "Converting user {0} (UUID {1}) to UUID-based storage", new Object[]{fallbackName, identifier});
                     }
 
                     PermissionsUserData oldData = backend.getUserData(fallbackName);
