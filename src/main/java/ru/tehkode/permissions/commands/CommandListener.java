@@ -28,6 +28,6 @@ package ru.tehkode.permissions.commands;
  */
 public interface CommandListener {
 
-    public void onRegistered(CommandsManager manager);
+    void onRegistered(CommandsManager manager);
 
 }

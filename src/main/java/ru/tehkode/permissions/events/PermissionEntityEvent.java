@@ -30,6 +30,7 @@ import java.util.UUID;
 public class PermissionEntityEvent extends PermissionEvent {
 
     private static final HandlerList handlers = new HandlerList();
+    private static final long serialVersionUID = 1L;
 
     public static HandlerList getHandlerList() {
         return handlers;

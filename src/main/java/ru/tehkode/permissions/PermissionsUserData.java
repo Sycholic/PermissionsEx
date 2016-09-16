@@ -15,5 +15,5 @@ public interface PermissionsUserData extends PermissionsData {
      * @param identifier New identifier
      * @return Whether operation was successful
      */
-    public boolean setIdentifier(String identifier);
+    boolean setIdentifier(String identifier);
 }

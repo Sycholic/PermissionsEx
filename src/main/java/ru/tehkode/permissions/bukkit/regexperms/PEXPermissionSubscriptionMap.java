@@ -23,6 +23,7 @@ public class PEXPermissionSubscriptionMap extends HashMap<String, Map<Permissibl
 
     private static FieldReplacer<PluginManager, Map> INJECTOR;
     private static final AtomicReference<PEXPermissionSubscriptionMap> INSTANCE = new AtomicReference<>();
+    private static final long serialVersionUID = 1L;
 
     /**
      * Inject a PEX permission subscription map into the provided plugin

@@ -15,7 +15,7 @@ public interface NativeInterface {
      * @param uid The UUID to convert to a name
      * @return The name associated with a UUID, or null if unknown
      */
-    public String UUIDToName(UUID uid);
+    String UUIDToName(UUID uid);
 
     /**
      * Returns the UUID associated with a name.
@@ -23,7 +23,7 @@ public interface NativeInterface {
      * @param name The name to convert
      * @return The UUID associated with this name, or null if unknown
      */
-    public UUID nameToUUID(String name);
+    UUID nameToUUID(String name);
 
     /**
      * Returns whether the player associated with this uuid is online
@@ -31,19 +31,19 @@ public interface NativeInterface {
      * @param uuid The uuid to check
      * @return Whether this uuid is online
      */
-    public boolean isOnline(UUID uuid);
+    boolean isOnline(UUID uuid);
 
     /**
      * Return the UUID associated with this server Mostly used internally
      *
      * @return This server's uuid
      */
-    public UUID getServerUUID();
+    UUID getServerUUID();
 
     /**
      * Calls an event on the server
      *
      * @param event The event to call
      */
-    public void callEvent(PermissionEvent event);
+    void callEvent(PermissionEvent event);
 }

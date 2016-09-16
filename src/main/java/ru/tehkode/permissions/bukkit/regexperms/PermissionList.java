@@ -22,6 +22,7 @@ public class PermissionList extends HashMap<String, Permission> {
     private static FieldReplacer<PluginManager, Map> INJECTOR;
 
     private static final Map<Class<?>, FieldReplacer<Permission, Map>> CHILDREN_MAPS = new HashMap<>();
+    private static final long serialVersionUID = 1L;
 
     public static PermissionList inject(PluginManager manager) {
         if (INJECTOR == null) {
@@ -96,6 +97,7 @@ public class PermissionList extends HashMap<String, Permission> {
     }
 
     private class NotifyingChildrenMap extends LinkedHashMap<String, Boolean> {
+        private static final long serialVersionUID = 1L;
         
         private final Permission perm;
 
