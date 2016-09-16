@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Data for SQL entities
@@ -224,7 +225,7 @@ public class SQLData implements PermissionsUserData, PermissionsGroupData {
 
     @Override
     public void setOption(String option, String value, String worldName) {
-        if (option == null || option.isEmpty()) {
+        if (StringUtils.isEmpty(option)) {
             return;
         }
 
@@ -368,7 +369,7 @@ public class SQLData implements PermissionsUserData, PermissionsGroupData {
             PreparedStatement statement = conn.prepAndBind("entity.parents.add", this.getIdentifier(), "toset", this.type.ordinal(), worldName);
             for (int i = parents.size() - 1; i >= 0; --i) {
                 final String group = parents.get(i);
-                if (group == null || group.isEmpty()) {
+                if (StringUtils.isEmpty(group)) {
                     continue;
                 }
                 statement.setString(2, group);

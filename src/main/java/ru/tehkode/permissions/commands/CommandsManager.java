@@ -186,7 +186,7 @@ public class CommandsManager {
                 if (argMatcher.find()) {
                     for (int index = 1; index <= argMatcher.groupCount(); index++) {
                         String argumentValue = argMatcher.group(index);
-                        if (argumentValue == null || argumentValue.isEmpty()) {
+                        if (org.apache.commons.lang.StringUtils.isEmpty(argumentValue)) {
                             continue;
                         }
 

@@ -28,6 +28,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Backend for permission
@@ -152,7 +153,7 @@ public abstract class PermissionBackend {
      * @throws ru.tehkode.permissions.exceptions.PermissionBackendException
      */
     public static PermissionBackend getBackend(String backendName, PermissionManager manager, ConfigurationSection config, String fallBackBackend) throws PermissionBackendException {
-        if (backendName == null || backendName.isEmpty()) {
+        if (StringUtils.isEmpty(backendName)) {
             backendName = DEFAULT_BACKEND;
         }
         

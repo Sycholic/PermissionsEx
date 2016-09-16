@@ -37,6 +37,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * @author t3hk0d3
@@ -158,7 +159,7 @@ public class PermissionManager {
      * @return PermissionUser instance
      */
     public PermissionUser getUser(String username) {
-        if (username == null || username.isEmpty()) {
+        if (StringUtils.isEmpty(username)) {
             throw new IllegalArgumentException("Null or empty name passed! Name must not be empty");
         }
 
@@ -398,7 +399,7 @@ public class PermissionManager {
      * @return PermissionGroup object
      */
     public PermissionGroup getGroup(String groupname) {
-        if (groupname == null || groupname.isEmpty()) {
+        if (StringUtils.isEmpty(groupname)) {
             return null;
         }
 

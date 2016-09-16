@@ -46,6 +46,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
+import org.apache.commons.lang.StringUtils;
 
 public class UtilityCommands extends PermissionsCommand {
 
@@ -94,7 +95,7 @@ public class UtilityCommands extends PermissionsCommand {
     public void config(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
 
         String nodeName = args.get("node");
-        if (nodeName == null || nodeName.isEmpty()) {
+        if (StringUtils.isEmpty(nodeName)) {
             return;
         }
 

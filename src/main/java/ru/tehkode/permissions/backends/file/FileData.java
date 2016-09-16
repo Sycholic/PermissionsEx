@@ -8,6 +8,7 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
+import org.apache.commons.lang.StringUtils;
 
 public class FileData implements PermissionsUserData, PermissionsGroupData {
 
@@ -256,7 +257,7 @@ public class FileData implements PermissionsUserData, PermissionsGroupData {
         List<String> parents = this.node.getStringList(formatPath(worldName, parentPath));
         for (Iterator<String> it = parents.iterator(); it.hasNext();) {
             final String test = it.next();
-            if (test == null || test.isEmpty()) {
+            if (StringUtils.isEmpty(test)) {
                 it.remove();
             }
         }

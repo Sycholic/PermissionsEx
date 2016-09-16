@@ -87,7 +87,7 @@ public class SQLBackend extends PermissionBackend {
         final String dbUser = getConfig().getString("user", "");
         final String dbPassword = getConfig().getString("password", "");
 
-        if (dbUri == null || dbUri.isEmpty()) {
+        if (org.apache.commons.lang.StringUtils.isEmpty(dbUri)) {
             getConfig().set("uri", "mysql://localhost/exampledb");
             getConfig().set("user", "databaseuser");
             getConfig().set("password", "databasepassword");
@@ -435,7 +435,7 @@ public class SQLBackend extends PermissionBackend {
 
     @Override
     public List<String> getWorldInheritance(String world) {
-        if (world == null || world.isEmpty()) {
+        if (org.apache.commons.lang.StringUtils.isEmpty(world)) {
             return Collections.emptyList();
         }
 
@@ -477,7 +477,7 @@ public class SQLBackend extends PermissionBackend {
 
     @Override
     public void setWorldInheritance(String worldName, List<String> parentWorlds) {
-        if (worldName == null || worldName.isEmpty()) {
+        if (org.apache.commons.lang.StringUtils.isEmpty(worldName)) {
             return;
         }
 

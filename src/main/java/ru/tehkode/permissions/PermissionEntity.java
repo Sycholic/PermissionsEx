@@ -28,6 +28,7 @@ import java.util.Set;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
+import org.apache.commons.lang.StringUtils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
@@ -39,7 +40,6 @@ import ru.tehkode.permissions.events.PermissionEntityEvent;
 public abstract class PermissionEntity {
 
     protected final static String NON_INHERITABLE_PREFIX = "#";
-
 
     protected PermissionManager manager;
     private String name;
@@ -125,7 +125,7 @@ public abstract class PermissionEntity {
             @Override
             protected String fetchLocal(PermissionEntity entity, String world) {
                 final String ret = entity.getOwnPrefix(world);
-                return ret == null || ret.isEmpty() ? null : ret;
+                return StringUtils.isEmpty(ret) ? null : ret;
             }
         }.traverse();
         return ret == null ? "" : ret;
@@ -134,7 +134,7 @@ public abstract class PermissionEntity {
     /**
      * Returns entity prefix
      *
-     * @return 
+     * @return
      */
     public String getPrefix() {
         return this.getPrefix(null);
@@ -163,7 +163,7 @@ public abstract class PermissionEntity {
             @Override
             protected String fetchLocal(PermissionEntity entity, String world) {
                 final String ret = entity.getOwnSuffix(world);
-                return ret == null || ret.isEmpty() ? null : ret;
+                return StringUtils.isEmpty(ret) ? null : ret;
             }
         }.traverse();
         return ret == null ? "" : ret;
@@ -203,7 +203,7 @@ public abstract class PermissionEntity {
      * @return true if entity has this permission otherwise false
      */
     public boolean has(String permission, String world) {
-        if (permission != null && permission.isEmpty()) { // empty permission for public access :)
+        if (StringUtils.isEmpty(permission)) { // empty permission for public access :)
             return true;
         }
 
@@ -799,7 +799,7 @@ public abstract class PermissionEntity {
     }
 
     public boolean explainExpression(String expression) {
-        if (expression == null || expression.isEmpty()) {
+        if (StringUtils.isEmpty(expression)) {
             return false;
         }
 
@@ -850,8 +850,7 @@ public abstract class PermissionEntity {
             @Override
             protected Void fetchLocal(PermissionEntity entity, String world) {
                 for (String groupName : entity.getOwnParentIdentifiers(world)) {
-                    if (groupName == null || groupName.trim().isEmpty()
-                            || (PermissionEntity.this instanceof PermissionGroup && groupName.equalsIgnoreCase(getIdentifier()))) {
+                    if (StringUtils.isEmpty(groupName) || (PermissionEntity.this instanceof PermissionGroup && groupName.equalsIgnoreCase(getIdentifier()))) {
                         continue;
                     }
 
@@ -899,7 +898,7 @@ public abstract class PermissionEntity {
     protected List<PermissionGroup> getWorldParents(String worldName) {
         List<PermissionGroup> groups = new LinkedList<>();
         for (String groupName : getData().getParents(worldName)) {
-            if (groupName == null || groupName.trim().isEmpty() || (this instanceof PermissionGroup && groupName.equalsIgnoreCase(this.getIdentifier()))) {
+            if (StringUtils.isEmpty(groupName.trim()) || (this instanceof PermissionGroup && groupName.equalsIgnoreCase(this.getIdentifier()))) {
                 continue;
             }
 

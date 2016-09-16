@@ -28,6 +28,7 @@ import ru.tehkode.permissions.exceptions.RankingException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * @author code
@@ -141,7 +142,7 @@ public class PermissionUser extends PermissionEntity {
      * @param worldName
      */
     public void addGroup(String groupName, String worldName) {
-        if (groupName == null || groupName.isEmpty()) {
+        if (StringUtils.isEmpty(groupName)) {
             return;
         }
 
@@ -198,7 +199,7 @@ public class PermissionUser extends PermissionEntity {
      * @param worldName
      */
     public void removeGroup(String groupName, String worldName) {
-        if (groupName == null || groupName.isEmpty()) {
+        if (StringUtils.isEmpty(groupName)) {
             return;
         }
 
@@ -333,7 +334,7 @@ public class PermissionUser extends PermissionEntity {
      * @throws RankingException
      */
     public PermissionGroup promote(PermissionUser promoter, String ladderName) throws RankingException {
-        if (ladderName == null || ladderName.isEmpty()) {
+        if (StringUtils.isEmpty(ladderName)) {
             ladderName = "default";
         }
 
@@ -384,7 +385,7 @@ public class PermissionUser extends PermissionEntity {
      * @throws RankingException
      */
     public PermissionGroup demote(PermissionUser demoter, String ladderName) throws RankingException {
-        if (ladderName == null || ladderName.isEmpty()) {
+        if (StringUtils.isEmpty(ladderName)) {
             ladderName = "default";
         }
 
@@ -455,7 +456,7 @@ public class PermissionUser extends PermissionEntity {
      * @return PermissionGroup object of ranked ladder group
      */
     public PermissionGroup getRankLadderGroup(String ladder) {
-        if (ladder == null || ladder.isEmpty()) {
+        if (StringUtils.isEmpty(ladder)) {
             ladder = "default";
         }
 

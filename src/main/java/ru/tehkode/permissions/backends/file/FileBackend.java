@@ -35,6 +35,7 @@ import java.io.Writer;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * @author code
@@ -200,7 +201,7 @@ public class FileBackend extends PermissionBackend {
 
     @Override
     public void setWorldInheritance(final String world, List<String> rawParentWorlds) {
-        if (world == null || world.isEmpty()) {
+        if (StringUtils.isEmpty(world)) {
             return;
         }
         final List<String> parentWorlds = new ArrayList<>(rawParentWorlds);
