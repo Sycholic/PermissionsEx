@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import static org.bukkit.Bukkit.getLogger;
 
 public class FileConfig extends YamlConfiguration {
 
@@ -42,7 +43,10 @@ public class FileConfig extends YamlConfiguration {
     public void save() throws IOException {
         if (!saveSuppressed) {
             this.save(tempFile);
-            oldFile.delete();
+            if (oldFile.exists() && !oldFile.delete()) {
+                getLogger().severe("Something might have went wrong, could not verify deletion of oldFile");
+            }
+
             if (!file.exists() || file.renameTo(oldFile)) {
                 if (!tempFile.renameTo(file)) {
                     throw new IOException("Unable to overwrite config with temporary file! New config is at " + tempFile + ", old config at" + oldFile);

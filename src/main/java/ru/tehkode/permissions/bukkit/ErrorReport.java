@@ -141,7 +141,7 @@ public class ErrorReport {
 
     public static void handleError(final String cause, final Throwable error, final CommandSender target) {
         if (!ASYNC_EXEC.isShutdown()) {
-            ASYNC_EXEC.submit(new Runnable() {
+            ASYNC_EXEC.submit(new Runnable() {  //TODO: submit method ignores exceptional return value.  Safe???
                 @Override
                 public void run() {
                     String msg = withException(cause, error).buildUserErrorMessage();

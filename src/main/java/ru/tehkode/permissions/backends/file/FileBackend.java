@@ -36,6 +36,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import org.apache.commons.lang.StringUtils;
+import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 /**
  * @author code
@@ -89,7 +90,15 @@ public class FileBackend extends PermissionBackend {
 
         File baseDirectory = new File(baseDir);
         if (!baseDirectory.exists()) {
-            baseDirectory.mkdirs();
+            try {
+                if (!baseDirectory.mkdirs()) {
+                    getLogger().severe("Could not create directory tree.");
+                    // TODO:  need plugin disable if possible.
+                }
+                
+            } catch (SecurityException e) {
+                getLogger().log(Level.SEVERE, "Caught SecurityException for creation of directory tree. {0}", e.getMessage());
+            }
         }
 
         this.permissionsFile = new File(baseDir, permissionFilename);
@@ -332,7 +341,9 @@ public class FileBackend extends PermissionBackend {
     private void initNewConfiguration() throws PermissionBackendException {
         if (!permissionsFile.exists()) {
             try {
-                permissionsFile.createNewFile();
+                if (!permissionsFile.createNewFile()) {
+                    getLogger().severe("Something went wrong, why are we trying to create a new permission config when it already exists....");
+                }
 
                 // Load default permissions
                 permissions.set("groups/default/options/default", true);
