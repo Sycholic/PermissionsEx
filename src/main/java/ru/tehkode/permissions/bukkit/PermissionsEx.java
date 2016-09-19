@@ -28,12 +28,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.ServicePriority;
@@ -90,7 +84,7 @@ public class PermissionsEx extends JavaPlugin implements NativeInterface {
     }
     protected PermissionManager permissionsManager;
     protected CommandsManager commandsManager;
-    private PermissionsExConfig config;
+    protected PermissionsExConfig config;
     protected SuperpermsListener superms;
     private RegexPermissions regexPerms;
     private NetEventsPlugin netEvents;
@@ -98,6 +92,9 @@ public class PermissionsEx extends JavaPlugin implements NativeInterface {
 
     {
         instance = this;
+        // TODO: This instance method writes to a static field. This is tricky to get correct if
+        // multiple instances are being manipulated, and generally bad practice.  Might not even be
+        // relevent to this case... need to look at this
     }
 
     public PermissionsEx() {
@@ -119,7 +116,7 @@ public class PermissionsEx extends JavaPlugin implements NativeInterface {
     @Override
     public void onLoad() {
         try {
-            this.config = new PermissionsExConfig(this.getConfig(), this);
+            this.setConfig(new PermissionsExConfig(this.getConfig(), this));
             this.commandsManager = new CommandsManager(this);
 
             if (!getServer().getOnlineMode()) {
@@ -179,7 +176,7 @@ public class PermissionsEx extends JavaPlugin implements NativeInterface {
             this.commandsManager.register(new UtilityCommands());
 
             // Register Player permissions cleaner
-            PlayerEventsListener cleaner = new PlayerEventsListener();
+            CleanerEventListener cleaner = new CleanerEventListener(this);
             this.getServer().getPluginManager().registerEvents(cleaner, this);
 
             // Register service
@@ -194,15 +191,15 @@ public class PermissionsEx extends JavaPlugin implements NativeInterface {
             if (getConfiguration().useNetEvents()) {
                 Plugin netEventsPlugin = getServer().getPluginManager().getPlugin("NetEvents");
                 if (netEventsPlugin != null && netEventsPlugin.isEnabled()) {
-                    NetEventsPlugin netEvents = (NetEventsPlugin) netEventsPlugin;
-                    getServer().getPluginManager().registerEvents(new RemoteEventListener(netEvents, permissionsManager), this);
-                    this.netEvents = netEvents;
+                    NetEventsPlugin netEP = (NetEventsPlugin) netEventsPlugin;
+                    getServer().getPluginManager().registerEvents(new RemoteEventListener(netEP, permissionsManager), this);
+                    this.netEvents = netEP;
                 }
             }
         } catch (PermissionBackendException e) {
             logBackendExc(e);
             this.getPluginLoader().disablePlugin(this);
-        } catch (Throwable t) {
+        } catch (SecurityException t) {
             ErrorReport.handleError("Error while enabling: ", t);
             this.getPluginLoader().disablePlugin(this);
         }
@@ -327,49 +324,11 @@ public class PermissionsEx extends JavaPlugin implements NativeInterface {
         return this.permissionsManager.has(player, permission, world);
     }
 
-    public class PlayerEventsListener implements Listener {
-
-        @EventHandler(priority = EventPriority.MONITOR)
-        public void onAsyncPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
-            if (event.getLoginResult() == AsyncPlayerPreLoginEvent.Result.ALLOWED && !requiresLateUserSetup()) {
-                getPermissionsManager().cacheUser(event.getUniqueId().toString(), event.getName());
-            }
-        }
-
-        @EventHandler
-        public void onPlayerLogin(PlayerJoinEvent event) {
-            try {
-                PermissionUser user = getPermissionsManager().getUser(event.getPlayer());
-                if (!user.isVirtual()) {
-                    if (!event.getPlayer().getName().equals(user.getOption("name"))) { // Update name only if user exists in config
-                        user.setOption("name", event.getPlayer().getName());
-                    }
-                    if (!config.shouldLogPlayers()) {
-                        return;
-                    }
-                    user.setOption("last-login-time", Long.toString(System.currentTimeMillis() / 1000L));
-                    // user.setOption("last-login-ip", event.getPlayer().getAddress().getAddress().getHostAddress()); // somehow this won't work
-                }
-            } catch (Throwable t) {
-                ErrorReport.handleError("While login cleanup event", t);
-            }
-        }
-
-        @EventHandler
-        public void onPlayerQuit(PlayerQuitEvent event) {
-            try {
-                PermissionUser user = getPermissionsManager().getUser(event.getPlayer());
-                if (!user.isVirtual()) {
-                    if (config.shouldLogPlayers()) {
-                        user.setOption("last-logout-time", Long.toString(System.currentTimeMillis() / 1000L));
-                    }
-
-                    user.getName(); // Set name if user was created during server run
-                }
-                getPermissionsManager().resetUser(event.getPlayer());
-            } catch (Throwable t) {
-                ErrorReport.handleError("While logout cleanup event", t);
-            }
-        }
+    /**
+     * @param config the config to set
+     */
+    protected void setConfig(PermissionsExConfig config) {
+        this.config = config;
     }
+
 }
