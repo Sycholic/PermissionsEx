@@ -85,7 +85,7 @@ public class RegexPermissions {
             if (success && hasDebugMode()) {
                 plugin.getLogger().log(Level.INFO, "Permissions handler for {0} successfully injected", player.getName());
             }
-        } catch (Throwable e) {
+        } catch (NoSuchFieldException | IllegalAccessException e) {
             plugin.getLogger().log(Level.SEVERE, "Unable to inject permissible for " + player.getName(), e);
         }
     }
@@ -119,7 +119,7 @@ public class RegexPermissions {
             } else if (hasDebugMode()) {
                 plugin.getLogger().log(Level.INFO, "Permissions handler for {0} successfully uninjected", player.getName());
             }
-        } catch (Throwable e) {
+        } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
     }

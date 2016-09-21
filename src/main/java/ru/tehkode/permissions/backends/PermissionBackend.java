@@ -179,7 +179,7 @@ public abstract class PermissionBackend {
             } else {
                 throw new RuntimeException(e);
             }
-        } catch (Throwable e) {
+        } catch (Throwable e) {  //TODO: This catch codeblock needs to be redone....
             if (e instanceof InvocationTargetException) {
                 e = e.getCause();
                 if (e instanceof PermissionBackendException) {
@@ -238,7 +238,7 @@ public abstract class PermissionBackend {
                     }
                     update.performUpdate();
                     newVersion = Math.max(update.getUpdateVersion(), newVersion);
-                } catch (Throwable t) {
+                } catch (IOException | PermissionBackendException t) {
                     ErrorReport.handleError("While updating to " + update.getUpdateVersion() + " from " + newVersion, t);
                     break;
                 }

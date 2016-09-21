@@ -81,7 +81,7 @@ public class ErrorReport {
             }
 
             return "http://git.io/" + sb.toString();
-        } catch (Exception e) {
+        } catch (IOException e) {
             return longUrl;
         }
     }
@@ -252,7 +252,7 @@ public class ErrorReport {
                         permissionsDb = writer.toString();
                         activeBackend = backend.toString();
                     }
-                } catch (Throwable t) {
+                } catch (IOException t) {
                     // Continue
                 }
             }

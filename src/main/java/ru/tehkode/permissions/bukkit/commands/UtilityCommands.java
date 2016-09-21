@@ -37,6 +37,7 @@ import ru.tehkode.permissions.commands.CommandsManager.CommandBinding;
 import ru.tehkode.permissions.exceptions.PermissionBackendException;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -105,7 +106,7 @@ public class UtilityCommands extends PermissionsCommand {
             config.set(nodeName, this.parseValue(args.get("value")));
             try {
                 config.save(new File(plugin.getDataFolder(), "config.yml"));
-            } catch (Throwable e) {
+            } catch (IOException e) {
                 sender.sendMessage(ChatColor.RED + "[PermissionsEx] Failed to save configuration: " + e.getMessage());
             }
         }
