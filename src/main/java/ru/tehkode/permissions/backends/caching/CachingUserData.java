@@ -23,11 +23,8 @@ public class CachingUserData extends CachingData implements PermissionsUserData 
 
     @Override
     public boolean setIdentifier(final String identifier) {
-        execute(new Runnable() {
-            @Override
-            public void run() {
-                getBackingData().setIdentifier(identifier);
-            }
+        execute(() -> {
+            getBackingData().setIdentifier(identifier);
         });
         return true; // TODO make this more accurate
     }

@@ -68,10 +68,10 @@ public class ErrorReport {
 
             String urlParameters = "url=" + URLEncoder.encode(longUrl, UTF8_ENCODING);
 
-            DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-            wr.writeBytes(urlParameters);
-            wr.flush();
-            wr.close();
+            try (DataOutputStream wr = new DataOutputStream(connection.getOutputStream())) {
+                wr.writeBytes(urlParameters);
+                wr.flush();
+            }
 
             BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String line;
@@ -141,17 +141,15 @@ public class ErrorReport {
 
     public static void handleError(final String cause, final Throwable error, final CommandSender target) {
         if (!ASYNC_EXEC.isShutdown()) {
-            ASYNC_EXEC.submit(new Runnable() {  //TODO: submit method ignores exceptional return value.  Safe???
-                @Override
-                public void run() {
-                    String msg = withException(cause, error).buildUserErrorMessage();
-                    if (target != null) {
-                        target.sendMessage(msg);
-                    } else {
-                        PermissionsEx.getPlugin().getLogger().severe(msg);
-                    }
+            ASYNC_EXEC.submit(() -> {
+                String msg = withException(cause, error).buildUserErrorMessage();
+                if (target != null) {
+                    target.sendMessage(msg);
+                } else {
+                    PermissionsEx.getPlugin().getLogger().severe(msg);
                 }
-            });
+            } //TODO: submit method ignores exceptional return value.  Lambda applies might not matter now.
+            );
         } else {
             String msg = withException(cause, error).buildUserErrorMessage();
             if (target != null) {

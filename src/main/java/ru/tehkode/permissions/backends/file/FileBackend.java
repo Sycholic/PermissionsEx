@@ -216,13 +216,10 @@ public class FileBackend extends PermissionBackend {
         final List<String> parentWorlds = new ArrayList<>(rawParentWorlds);
         worldInheritanceCache.put(world, parentWorlds);
 
-        getExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                synchronized (lock) {
-                    permissions.set(buildPath("worlds", world, "inheritance"), parentWorlds);
-                    save();
-                }
+        getExecutor().execute(() -> {
+            synchronized (lock) {
+                permissions.set(buildPath("worlds", world, "inheritance"), parentWorlds);
+                save();
             }
         });
     }

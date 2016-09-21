@@ -33,7 +33,7 @@ public class MultiBackend extends PermissionBackend {
         Map<String, PermissionBackend> backendMap = new HashMap<>();
         List<String> backendNames = backendConfig.getStringList("backends");
         if (backendNames.isEmpty()) {
-            backendConfig.set("backends", new ArrayList<String>());
+            backendConfig.set("backends", new ArrayList<>());
             throw new PermissionBackendException("No backends configured for multi backend! Please configure this!");
         }
         for (String name : backendConfig.getStringList("backends")) {

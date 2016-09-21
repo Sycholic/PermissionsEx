@@ -139,7 +139,7 @@ public class PermissionGroup extends PermissionEntity implements Comparable<Perm
      * group
      */
     public boolean isChildOf(PermissionGroup group, String worldName, boolean checkInheritance) {
-        return isChildOf(group, worldName, checkInheritance ? new HashSet<String>() : null);
+        return isChildOf(group, worldName, checkInheritance ? new HashSet<>() : null);
     }
 
     private boolean isChildOf(PermissionGroup group, String worldName, Set<String> visitedParents) {

@@ -88,7 +88,7 @@ public class PEXPermissionSubscriptionMap extends HashMap<String, Map<Permissibl
 
         Map<Permissible, Boolean> result = super.get(key);
         if (result == null) {
-            result = new PEXSubscriptionValueMap((String) key, new WeakHashMap<Permissible, Boolean>());
+            result = new PEXSubscriptionValueMap((String) key, new WeakHashMap<>());
             super.put((String) key, result);
         } else if (!(result instanceof PEXSubscriptionValueMap)) {
             result = new PEXSubscriptionValueMap((String) key, result);
@@ -170,7 +170,7 @@ public class PEXPermissionSubscriptionMap extends HashMap<String, Map<Permissibl
         @Override
         public Set<Permissible> keySet() {
             Collection<? extends Player> players = plugin.getServer().getOnlinePlayers();
-            Set<Permissible> pexMatches = new HashSet<Permissible>(players.size());
+            Set<Permissible> pexMatches = new HashSet<>(players.size());
             for (Player player : players) {
                 if (player.hasPermission(permission)) {
                     pexMatches.add(player);

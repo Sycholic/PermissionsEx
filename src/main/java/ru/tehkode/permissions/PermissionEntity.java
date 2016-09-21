@@ -686,7 +686,7 @@ public abstract class PermissionEntity {
         }
 
         if (!this.timedPermissions.containsKey(world)) {
-            this.timedPermissions.put(world, new LinkedList<String>());
+            this.timedPermissions.put(world, new LinkedList<>());
         }
 
         this.timedPermissions.get(world).add(permission);

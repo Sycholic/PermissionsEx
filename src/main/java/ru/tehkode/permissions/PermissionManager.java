@@ -86,12 +86,9 @@ public class PermissionManager {
         long newDelay = (nextExpiration - (System.currentTimeMillis() / 1000));
 
         if (future == null || future.isDone() || future.getDelay(TimeUnit.SECONDS) > newDelay) {
-            clearTimedGroupsTasks.put(identifier, executor.schedule(new Runnable() {
-                @Override
-                public void run() {
-                    getUser(identifier).updateTimedGroups();
-                    clearTimedGroupsTasks.remove(identifier);
-                }
+            clearTimedGroupsTasks.put(identifier, executor.schedule(() -> {
+                getUser(identifier).updateTimedGroups();
+                clearTimedGroupsTasks.remove(identifier);
             }, newDelay, TimeUnit.SECONDS));
         }
     }

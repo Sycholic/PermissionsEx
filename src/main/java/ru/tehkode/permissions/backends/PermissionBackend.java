@@ -209,19 +209,13 @@ public abstract class PermissionBackend {
         this.manager = manager;
         this.backendConfig = backendConfig;
         this.asyncExecutor = Executors.newSingleThreadExecutor();
-        this.onThreadExecutor = new Executor() {
-            @Override
-            public void execute(Runnable runnable) {
-                runnable.run();
-            }
+        this.onThreadExecutor = (Runnable runnable) -> {
+            runnable.run();
         };
         this.activeExecutor = asyncExecutor; // Default
 
-        this.activeExecutorPtr = new Executor() {
-            @Override
-            public void execute(Runnable runnable) {
-                PermissionBackend.this.activeExecutor.execute(runnable);
-            }
+        this.activeExecutorPtr = (Runnable runnable) -> {
+            PermissionBackend.this.activeExecutor.execute(runnable);
         };
     }
 

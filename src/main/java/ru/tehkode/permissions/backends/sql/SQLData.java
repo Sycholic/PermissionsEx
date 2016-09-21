@@ -25,13 +25,11 @@ public class SQLData implements PermissionsUserData, PermissionsGroupData {
     public static Set<String> getEntitiesNames(SQLConnection sql, Type type, boolean defaultOnly) throws SQLException {
         Set<String> entities = new HashSet<>();
         
-        ResultSet result = sql.prepAndBind("SELECT `name` FROM `{permissions_entity}` WHERE `type` = ? " + (defaultOnly ? " AND `default` = 1" : ""), type.ordinal()).executeQuery();
-        
-        while (result.next()) {
-            entities.add(result.getString("name"));
+        try (ResultSet result = sql.prepAndBind("SELECT `name` FROM `{permissions_entity}` WHERE `type` = ? " + (defaultOnly ? " AND `default` = 1" : ""), type.ordinal()).executeQuery()) {
+            while (result.next()) {
+                entities.add(result.getString("name"));
+            }
         }
-        
-        result.close();
         
         return Collections.unmodifiableSet(entities);
     }
