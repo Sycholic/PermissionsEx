@@ -498,6 +498,7 @@ public class SQLBackend extends PermissionBackend {
         }
     }
 
+    @Override
     public void reload() {
         worldInheritanceCache.clear();
         userNamesCache.set(null);

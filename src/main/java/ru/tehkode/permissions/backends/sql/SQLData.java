@@ -85,6 +85,7 @@ public class SQLData implements PermissionsUserData, PermissionsGroupData {
     }
     // Interface methods
 
+    @Override
     public String getIdentifier() {
         return identifier;
     }

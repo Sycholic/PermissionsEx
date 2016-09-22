@@ -52,6 +52,7 @@ public class PermissionGroup extends PermissionEntity implements Comparable<Perm
         }
     }
 
+    @Override
     public Type getType() {
         return Type.GROUP;
     }
@@ -276,6 +277,7 @@ public class PermissionGroup extends PermissionEntity implements Comparable<Perm
         callEvent(PermissionEntityEvent.Action.DEFAULTGROUP_CHANGED);
     }
 
+    @Override
     protected void clearCache() {
         this.dirtyWeight = true;
         for (PermissionUser user : this.getActiveUsers()) {

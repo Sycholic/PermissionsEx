@@ -583,6 +583,7 @@ public class PermissionUser extends PermissionEntity {
         return result;
     }
 
+    @Override
     protected void clearCache() {
         this.cachedPrefix.clear();
         this.cachedSuffix.clear();
