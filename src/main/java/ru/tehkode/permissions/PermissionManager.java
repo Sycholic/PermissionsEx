@@ -125,13 +125,7 @@ public class PermissionManager {
      * @return true on success false otherwise
      */
     public boolean has(String playerName, String permission, String world) {
-        PermissionUser user = this.getUser(playerName);
-
-        if (user == null) {
-            return false;
-        }
-
-        return user.has(permission, world);
+        return this.getUser(playerName).has(permission, world);
     }
 
     /**
@@ -143,9 +137,7 @@ public class PermissionManager {
      * @return true on success false otherwise
      */
     public boolean has(UUID playerId, String permission, String world) {
-        PermissionUser user = this.getUser(playerId);
-
-        return user != null && user.has(permission, world);
+        return this.getUser(playerId).has(permission, world);
 
     }
 
@@ -365,19 +357,16 @@ public class PermissionManager {
      * @param userName
      */
     public void clearUserCache(String userName) {
-        PermissionUser user = this.getUser(userName);
-
-        if (user != null) {
-            user.clearCache();
-        }
+        this.getUser(userName).clearCache();
     }
 
+    /**
+     * Clear cache for specified user
+     *
+     * @param uid
+     */
     public void clearUserCache(UUID uid) {
-        PermissionUser user = this.getUser(uid);
-
-        if (user != null) {
-            user.clearCache();
-        }
+        this.getUser(uid).clearCache();
     }
 
     /**
@@ -513,7 +502,7 @@ public class PermissionManager {
      * Reset in-memory object for groupName
      *
      * @param groupName group's name
-     * @return result of groupName removal from groups   
+     * @return result of groupName removal from groups
      */
     public PermissionGroup resetGroup(String groupName) {
         return this.groups.remove(groupName.toLowerCase());
@@ -653,6 +642,7 @@ public class PermissionManager {
     /**
      * Reset all in-memory groups and users, clean up runtime stuff, reloads
      * backend
+     *
      * @throws ru.tehkode.permissions.exceptions.PermissionBackendException
      */
     public void reset() throws PermissionBackendException {

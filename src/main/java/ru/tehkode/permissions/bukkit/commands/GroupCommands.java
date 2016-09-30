@@ -215,6 +215,7 @@ public class GroupCommands extends PermissionsCommand {
 
     /**
      * Group inheritance
+     *
      * @param plugin
      * @param sender
      * @param args
@@ -361,6 +362,7 @@ public class GroupCommands extends PermissionsCommand {
 
     /**
      * Group permissions
+     *
      * @param plugin
      * @param sender
      * @param args
@@ -569,6 +571,7 @@ public class GroupCommands extends PermissionsCommand {
 
     /**
      * Group users management
+     *
      * @param plugin
      * @param sender
      * @param args
@@ -581,11 +584,6 @@ public class GroupCommands extends PermissionsCommand {
         String groupName = this.autoCompleteGroupName(args.get("group"));
 
         Set<PermissionUser> users = plugin.getPermissionsManager().getUsers(groupName);
-
-        if (users == null || users.isEmpty()) {
-            sender.sendMessage(ChatColor.RED + "Group \"" + groupName + "\" doesn't exist.");
-            return;
-        }
 
         if (users.isEmpty()) {
             sender.sendMessage(ChatColor.RED + "Group \"" + groupName + "\" has no users.");
@@ -617,12 +615,11 @@ public class GroupCommands extends PermissionsCommand {
 
         for (String userName : users) {
             userName = this.autoCompletePlayerName(userName);
-            PermissionUser user = plugin.getPermissionsManager().getUser(userName);
-
-            if (user == null) {
-                sender.sendMessage(ChatColor.RED + "User \"" + userName + "\" doesn't exist.");
+            if (userName == null) {
+                sender.sendMessage(ChatColor.RED + "User does not match any known names!");
                 return;
             }
+            PermissionUser user = plugin.getPermissionsManager().getUser(userName);
 
             user.addGroup(groupName, worldName);
 
@@ -649,12 +646,11 @@ public class GroupCommands extends PermissionsCommand {
 
         for (String userName : users) {
             userName = this.autoCompletePlayerName(userName);
-            PermissionUser user = plugin.getPermissionsManager().getUser(userName);
-
-            if (user == null) {
-                sender.sendMessage(ChatColor.RED + "User \"" + userName + "\" doesn't exist.");
+            if (userName == null) {
+                sender.sendMessage(ChatColor.RED + "User does not match any known names!");
                 return;
             }
+            PermissionUser user = plugin.getPermissionsManager().getUser(userName);
 
             user.removeGroup(groupName, worldName);
 

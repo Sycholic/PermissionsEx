@@ -76,12 +76,11 @@ public class PromotionCommands extends PermissionsCommand {
             isPrimary = true)
     public void promoteUser(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
         String userName = this.autoCompletePlayerName(args.get("user"));
-        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
-
-        if (user == null) {
-            sender.sendMessage("Specified user \"" + args.get("user") + "\" not found!");
+        if (userName == null) {
+            sender.sendMessage(ChatColor.RED + "User does not match any known names!");
             return;
         }
+        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
 
         String promoterName = "console";
         String ladder = "default";
@@ -93,7 +92,7 @@ public class PromotionCommands extends PermissionsCommand {
         PermissionUser promoter = null;
         if (sender instanceof Player) {
             promoter = plugin.getPermissionsManager().getUser((Player) sender);
-            if (promoter == null || !promoter.has("permissions.user.promote." + ladder, ((Player) sender).getWorld().getName())) {
+            if (!promoter.has("permissions.user.promote." + ladder, ((Player) sender).getWorld().getName())) {
                 sender.sendMessage(ChatColor.RED + "You don't have enough permissions to promote on this ladder");
                 return;
             }
@@ -119,12 +118,11 @@ public class PromotionCommands extends PermissionsCommand {
             isPrimary = true)
     public void demoteUser(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
         String userName = this.autoCompletePlayerName(args.get("user"));
-        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
-
-        if (user == null) {
-            sender.sendMessage(ChatColor.RED + "Specified user \"" + args.get("user") + "\" not found!");
+        if (userName == null) {
+            sender.sendMessage(ChatColor.RED + "User does not match any known names!");
             return;
         }
+        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
 
         String demoterName = "console";
         String ladder = "default";
@@ -137,7 +135,7 @@ public class PromotionCommands extends PermissionsCommand {
         if (sender instanceof Player) {
             demoter = plugin.getPermissionsManager().getUser((Player) sender);
 
-            if (demoter == null || !demoter.has("permissions.user.demote." + ladder, ((Player) sender).getWorld().getName())) {
+            if (!demoter.has("permissions.user.demote." + ladder, ((Player) sender).getWorld().getName())) {
                 sender.sendMessage(ChatColor.RED + "You don't have enough permissions to demote on this ladder");
                 return;
             }

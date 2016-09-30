@@ -72,6 +72,7 @@ public class UserCommands extends PermissionsCommand {
 
     /**
      * User permission management
+     *
      * @param plugin
      * @param sender
      * @param args
@@ -84,12 +85,11 @@ public class UserCommands extends PermissionsCommand {
         String userName = this.autoCompletePlayerName(args.get("user"));
         String worldName = this.autoCompleteWorldName(args.get("world"));
 
-        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
-
-        if (user == null) {
-            sender.sendMessage(ChatColor.RED + "User \"" + userName + "\" doesn't exist.");
+        if (userName == null) {
+            sender.sendMessage(ChatColor.RED + "User does not match any known names!");
             return;
         }
+        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
         userName = user.getName();
 
         sender.sendMessage("'" + describeUser(user) + "' is a member of:");
@@ -123,13 +123,12 @@ public class UserCommands extends PermissionsCommand {
         String userName = this.autoCompletePlayerName(args.get("user"));
         String worldName = this.autoCompleteWorldName(args.get("world"));
 
-        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
-
-        if (user == null) {
-            sender.sendMessage(ChatColor.RED + "User \"" + userName + "\" doesn't exist.");
+        if (userName == null) {
+            sender.sendMessage(ChatColor.RED + "User does not match any known names!");
             return;
         }
 
+        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
         sender.sendMessage(user.getName() + "'s permissions:");
 
         for (String permission : user.getPermissions(worldName)) {
@@ -144,7 +143,10 @@ public class UserCommands extends PermissionsCommand {
             description = "List user actual superperms")
     public void userListSuperPermissions(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
         String userName = this.autoCompletePlayerName(args.get("user"));
-
+        if (userName == null) {
+            sender.sendMessage(ChatColor.RED + "User does not match any known names!");
+            return;
+        }
         Player player;
         try {
             UUID uid = UUID.fromString(userName);
@@ -179,12 +181,12 @@ public class UserCommands extends PermissionsCommand {
         String userName = this.autoCompletePlayerName(args.get("user"));
         String worldName = this.autoCompleteWorldName(args.get("world"));
 
-        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
-
-        if (user == null) {
-            sender.sendMessage(ChatColor.RED + "User \"" + userName + "\" doesn't exist.");
+        if (userName == null) {
+            sender.sendMessage(ChatColor.RED + "User does not match any known names!");
             return;
         }
+
+        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
 
         if (args.containsKey("newprefix")) {
             user.setPrefix(args.get("newprefix"), worldName);
@@ -202,12 +204,12 @@ public class UserCommands extends PermissionsCommand {
         String userName = this.autoCompletePlayerName(args.get("user"));
         String worldName = this.autoCompleteWorldName(args.get("world"));
 
-        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
-
-        if (user == null) {
-            sender.sendMessage(ChatColor.RED + "User \"" + userName + "\" doesn't exist.");
+        if (userName == null) {
+            sender.sendMessage(ChatColor.RED + "User does not match any known names!");
             return;
         }
+
+        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
 
         if (args.containsKey("newsuffix")) {
             user.setSuffix(args.get("newsuffix"), worldName);
@@ -224,13 +226,12 @@ public class UserCommands extends PermissionsCommand {
     public void userToggleDebug(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
         String userName = this.autoCompletePlayerName(args.get("user"));
 
-        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
-
-        if (user == null) {
-            sender.sendMessage(ChatColor.RED + "User \"" + userName + "\" doesn't exist.");
+        if (userName == null) {
+            sender.sendMessage(ChatColor.RED + "User does not match any known names!");
             return;
         }
 
+        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
         user.setDebug(!user.isDebug());
 
         sender.sendMessage("Debug mode for user " + describeUser(user) + " " + (user.isDebug() ? "enabled" : "disabled") + "!");
@@ -243,13 +244,11 @@ public class UserCommands extends PermissionsCommand {
     public void userCheckPermission(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
         String userName = this.autoCompletePlayerName(args.get("user"));
         String worldName = this.autoCompleteWorldName(args.get("world"));
-
-        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
-
-        if (user == null) {
-            sender.sendMessage(ChatColor.RED + "User \"" + userName + "\" doesn't exist.");
+        if (userName == null) {
+            sender.sendMessage(ChatColor.RED + "User does not match any known names!");
             return;
         }
+        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
 
         worldName = this.getSafeWorldName(worldName, user);
 
@@ -269,13 +268,11 @@ public class UserCommands extends PermissionsCommand {
     public void userGetOption(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
         String userName = this.autoCompletePlayerName(args.get("user"));
         String worldName = this.autoCompleteWorldName(args.get("world"));
-
-        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
-
-        if (user == null) {
-            sender.sendMessage(ChatColor.RED + "User \"" + userName + "\" doesn't exist.");
+        if (userName == null) {
+            sender.sendMessage(ChatColor.RED + "User does not match any known names!");
             return;
         }
+        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
 
         worldName = this.getSafeWorldName(worldName, user);
 
@@ -290,12 +287,11 @@ public class UserCommands extends PermissionsCommand {
             description = "Remove <user>")
     public void userDelete(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
         String userName = this.autoCompletePlayerName(args.get("user"));
-        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
-
-        if (user == null) {
-            sender.sendMessage(ChatColor.RED + "User \"" + userName + "\" doesn't exist.");
+        if (userName == null) {
+            sender.sendMessage(ChatColor.RED + "User does not match any known names!");
             return;
         }
+        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
 
         if (user.isVirtual()) {
             sender.sendMessage(ChatColor.RED + "User \"" + describeUser(user) + "\" is virtual.");
@@ -315,13 +311,11 @@ public class UserCommands extends PermissionsCommand {
     public void userAddPermission(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
         String userName = this.autoCompletePlayerName(args.get("user"));
         String worldName = this.autoCompleteWorldName(args.get("world"));
-
-        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
-
-        if (user == null) {
-            sender.sendMessage(ChatColor.RED + "User \"" + userName + "\" doesn't exist.");
+        if (userName == null) {
+            sender.sendMessage(ChatColor.RED + "User does not match any known names!");
             return;
         }
+        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
 
         user.addPermission(args.get("permission"), worldName);
 
@@ -337,13 +331,11 @@ public class UserCommands extends PermissionsCommand {
     public void userRemovePermission(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
         String userName = this.autoCompletePlayerName(args.get("user"));
         String worldName = this.autoCompleteWorldName(args.get("world"));
-
-        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
-
-        if (user == null) {
-            sender.sendMessage(ChatColor.RED + "User \"" + userName + "\" doesn't exist.");
+        if (userName == null) {
+            sender.sendMessage(ChatColor.RED + "User does not match any known names!");
             return;
         }
+        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
 
         String permission = this.autoCompletePermission(user, args.get("permission"), worldName);
 
@@ -361,13 +353,11 @@ public class UserCommands extends PermissionsCommand {
     public void userSwapPermission(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
         String userName = this.autoCompletePlayerName(args.get("user"));
         String worldName = this.autoCompleteWorldName(args.get("world"));
-
-        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
-
-        if (user == null) {
-            sender.sendMessage(ChatColor.RED + "User \"" + userName + "\" doesn't exist.");
+        if (userName == null) {
+            sender.sendMessage(ChatColor.RED + "User does not match any known names!");
             return;
         }
+        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
 
         List<String> permissions = user.getOwnPermissions(worldName);
 
@@ -395,19 +385,16 @@ public class UserCommands extends PermissionsCommand {
     public void userAddTimedPermission(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
         String userName = this.autoCompletePlayerName(args.get("user"));
         String worldName = this.autoCompleteWorldName(args.get("world"));
-
+        if (userName == null) {
+            sender.sendMessage(ChatColor.RED + "User does not match any known names!");
+            return;
+        }
         int lifetime = 0;
 
         if (args.containsKey("lifetime")) {
             lifetime = DateUtils.parseInterval(args.get("lifetime"));
         }
-
         PermissionUser user = plugin.getPermissionsManager().getUser(userName);
-
-        if (user == null) {
-            sender.sendMessage(ChatColor.RED + "User \"" + userName + "\" doesn't exist.");
-            return;
-        }
 
         String permission = args.get("permission");
 
@@ -427,13 +414,11 @@ public class UserCommands extends PermissionsCommand {
         String userName = this.autoCompletePlayerName(args.get("user"));
         String worldName = this.autoCompleteWorldName(args.get("world"));
         String permission = args.get("permission");
-
-        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
-
-        if (user == null) {
-            sender.sendMessage(ChatColor.RED + "User \"" + userName + "\" doesn't exist.");
+        if (userName == null) {
+            sender.sendMessage(ChatColor.RED + "User does not match any known names!");
             return;
         }
+        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
 
         user.removeTimedPermission(args.get("permission"), worldName);
 
@@ -448,13 +433,11 @@ public class UserCommands extends PermissionsCommand {
     public void userSetOption(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
         String userName = this.autoCompletePlayerName(args.get("user"));
         String worldName = this.autoCompleteWorldName(args.get("world"));
-
-        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
-
-        if (user == null) {
-            sender.sendMessage(ChatColor.RED + "User \"" + userName + "\" doesn't exist.");
+        if (userName == null) {
+            sender.sendMessage(ChatColor.RED + "User does not match any known names!");
             return;
         }
+        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
 
         user.setOption(args.get("option"), args.get("value"), worldName);
 
@@ -469,6 +452,7 @@ public class UserCommands extends PermissionsCommand {
 
     /**
      * User's groups management
+     *
      * @param plugin
      * @param sender
      * @param args
@@ -480,13 +464,11 @@ public class UserCommands extends PermissionsCommand {
     public void userListGroup(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
         String userName = this.autoCompletePlayerName(args.get("user"));
         String worldName = this.autoCompleteWorldName(args.get("world"));
-
-        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
-
-        if (user == null) {
-            sender.sendMessage(ChatColor.RED + "User \"" + userName + "\" doesn't exist.");
+        if (userName == null) {
+            sender.sendMessage(ChatColor.RED + "User does not match any known names!");
             return;
         }
+        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
 
         sender.sendMessage("User \"" + describeUser(user) + "\" @" + worldName + " currently in:");
         for (PermissionGroup group : user.getParents(worldName)) {
@@ -502,13 +484,11 @@ public class UserCommands extends PermissionsCommand {
         String userName = this.autoCompletePlayerName(args.get("user"));
         String groupName = this.autoCompleteGroupName(args.get("group"));
         String worldName = this.autoCompleteWorldName(args.get("world"));
-
-        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
-
-        if (user == null) {
-            sender.sendMessage(ChatColor.RED + "User \"" + userName + "\" doesn't exist.");
+        if (userName == null) {
+            sender.sendMessage(ChatColor.RED + "User does not match any known names!");
             return;
         }
+        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
 
         if (args.containsKey("lifetime")) {
             try {
@@ -570,13 +550,11 @@ public class UserCommands extends PermissionsCommand {
 
         String userName = this.autoCompletePlayerName(args.get("user"));
         String worldName = this.autoCompleteWorldName(args.get("world"));
-
-        PermissionUser user = manager.getUser(userName);
-
-        if (user == null) {
-            sender.sendMessage(ChatColor.RED + "User \"" + userName + "\" doesn't exist.");
+        if (userName == null) {
+            sender.sendMessage(ChatColor.RED + "User does not match any known names!");
             return;
         }
+        PermissionUser user = manager.getUser(userName);
 
         if (!groups.isEmpty()) {
             user.setParents(groups, worldName);
@@ -596,13 +574,11 @@ public class UserCommands extends PermissionsCommand {
         String userName = this.autoCompletePlayerName(args.get("user"));
         String groupName = this.autoCompleteGroupName(args.get("group"));
         String worldName = this.autoCompleteWorldName(args.get("world"));
-
-        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
-
-        if (user == null) {
-            sender.sendMessage(ChatColor.RED + "User \"" + userName + "\" doesn't exist.");
+        if (userName == null) {
+            sender.sendMessage(ChatColor.RED + "User does not match any known names!");
             return;
         }
+        PermissionUser user = plugin.getPermissionsManager().getUser(userName);
 
         user.removeGroup(groupName, worldName);
 

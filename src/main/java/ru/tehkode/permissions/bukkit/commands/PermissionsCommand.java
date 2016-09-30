@@ -136,8 +136,13 @@ public abstract class PermissionsCommand implements CommandListener {
             return players.get(0);
         }
 
-        // Nothing found
-        return playerName;
+        /*  No player was found.  This used to return playerName still which let
+            issues with matching any name string even ones that did not exist.
+            This is fine this way because autocomplete's return of null will be caught.
+            As originally designed....
+            And a player not found warnings work again now.
+        */
+        return null;
     }
 
     protected String describeUser(PermissionUser user) {

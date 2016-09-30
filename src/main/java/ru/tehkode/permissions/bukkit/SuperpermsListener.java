@@ -53,14 +53,13 @@ public class SuperpermsListener implements Listener {
         }
 
         PermissionUser user = plugin.getPermissionsManager().getUser(player);
-        if (user != null) {
-            if (user.isDebug()) {
-                plugin.getLogger().log(Level.INFO, "Updating superperms for player {0}", player.getName());
-            }
-            updatePlayerPermission(playerPerm, user, worldName);
-            updatePlayerMetadata(playerOptionPerm, user, worldName);
-            player.recalculatePermissions();
+        if (user.isDebug()) {
+            plugin.getLogger().log(Level.INFO, "Updating superperms for player {0}", player.getName());
         }
+        updatePlayerPermission(playerPerm, user, worldName);
+        updatePlayerMetadata(playerOptionPerm, user, worldName);
+        player.recalculatePermissions();
+
     }
 
     private String permissionName(Player player, String suffix) {

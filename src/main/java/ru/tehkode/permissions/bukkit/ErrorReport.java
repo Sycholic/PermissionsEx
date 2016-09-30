@@ -256,7 +256,7 @@ public class ErrorReport {
                     // Continue
                 }
             }
-            if (permissionsDb == null && pexConfig.getString("permissions.backends." + pexConfig.getString("permissions.backend", "file") + ".type", "file").equalsIgnoreCase("file")) {
+            if (pexConfig.getString("permissions.backends." + pexConfig.getString("permissions.backend", "file") + ".type", "file").equalsIgnoreCase("file")) {
                 File file = new File(pexPlugin.getDataFolder(), pexConfig.getString("permissions.backends.file.file", "permissions.yml"));
                 if (file.exists()) {
                     try {
@@ -266,9 +266,6 @@ public class ErrorReport {
                     }
                 }
             }
-        }
-        if (permissionsDb == null) {
-            permissionsDb = "Backend is not file or plugin was not accessible, see configuration file for details";
         }
 
         builder.addHeading("Permissions database");
