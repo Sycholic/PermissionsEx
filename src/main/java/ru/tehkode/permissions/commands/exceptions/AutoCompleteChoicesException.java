@@ -19,6 +19,7 @@
 package ru.tehkode.permissions.commands.exceptions;
 
 public class AutoCompleteChoicesException extends RuntimeException {
+    private static final long serialVersionUID = 1L;
 
     protected String[] choices;
     protected String argName;

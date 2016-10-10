@@ -75,7 +75,13 @@ public class PromotionCommands extends PermissionsCommand {
             description = "Promotes <user> to next group on [ladder]",
             isPrimary = true)
     public void promoteUser(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
+        if (args.get("user").length() < 2) {
+            sender.sendMessage(ChatColor.RED + "User name length can not be less then 2!");
+            return;
+        }
+
         String userName = this.autoCompletePlayerName(args.get("user"));
+
         if (userName == null) {
             sender.sendMessage(ChatColor.RED + "User does not match any known names!");
             return;
@@ -117,6 +123,11 @@ public class PromotionCommands extends PermissionsCommand {
             description = "Demotes <user> to previous group or [ladder]",
             isPrimary = true)
     public void demoteUser(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
+        if (args.get("user").length() < 2) {
+            sender.sendMessage(ChatColor.RED + "User name length can not be less then 2!");
+            return;
+        }
+
         String userName = this.autoCompletePlayerName(args.get("user"));
         if (userName == null) {
             sender.sendMessage(ChatColor.RED + "User does not match any known names!");

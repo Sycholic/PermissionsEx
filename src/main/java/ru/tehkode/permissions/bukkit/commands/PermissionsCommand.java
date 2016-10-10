@@ -98,19 +98,30 @@ public abstract class PermissionsCommand implements CommandListener {
         if (playerName == null) {
             return null;
         }
-
+        
+        //  What is this for?  Nothing documented anywhere about this
         if (playerName.startsWith("#")) {
             return nameToUUID(playerName.substring(1));
         }
-
+       
+        // check if playerName is a UUID string
+        try {
+            return (UUID.fromString(playerName)).toString();
+        }      
+        // Do nothing as the IAE is expected to happen this is how we catch a UUID playerName
+        catch (IllegalArgumentException e) {
+        }
+         
         List<String> players = new LinkedList<>();
-
+        
         // Collect online Player names
         for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+            // Check for direct match first
             if (player.getName().equalsIgnoreCase(playerName)) {
                 return player.getUniqueId().toString();
             }
-
+                
+            // Add player to list of partial matches
             if (player.getName().toLowerCase().startsWith(playerName.toLowerCase()) && !players.contains(player.getUniqueId().toString())) {
                 players.add(player.getUniqueId().toString());
             }
@@ -118,10 +129,13 @@ public abstract class PermissionsCommand implements CommandListener {
 
         // Collect registered PEX user names
         for (String user : PermissionsEx.getPermissionManager().getUserNames()) {
+            
+            // Check for direct match on all PEX known names
             if (user.equalsIgnoreCase(playerName)) {
                 return nameToUUID(user);
             }
 
+            // Add player to list of partial matches  (( Need to get off string offlinematching bet this the issue))
             if (user.toLowerCase().startsWith(playerName.toLowerCase())) {
                 final String uid = nameToUUID(user);
                 if (!players.contains(uid)) {
@@ -142,6 +156,7 @@ public abstract class PermissionsCommand implements CommandListener {
             As originally designed....
             And a player not found warnings work again now.
         */
+        // return playerName;
         return null;
     }
 

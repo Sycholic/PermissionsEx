@@ -614,7 +614,13 @@ public class GroupCommands extends PermissionsCommand {
         }
 
         for (String userName : users) {
+            if (userName.length() < 2) {
+                sender.sendMessage(ChatColor.RED + "User name length can not be less then 2!");
+                return;
+            }
+            
             userName = this.autoCompletePlayerName(userName);
+            
             if (userName == null) {
                 sender.sendMessage(ChatColor.RED + "User does not match any known names!");
                 return;
@@ -645,7 +651,13 @@ public class GroupCommands extends PermissionsCommand {
         }
 
         for (String userName : users) {
+            if (userName.length() < 2) {
+                sender.sendMessage(ChatColor.RED + "User name length can not be less then 2!");
+                return;
+            }
+            
             userName = this.autoCompletePlayerName(userName);
+            
             if (userName == null) {
                 sender.sendMessage(ChatColor.RED + "User does not match any known names!");
                 return;

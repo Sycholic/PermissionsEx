@@ -62,14 +62,13 @@ public class UserCommands extends PermissionsCommand {
         this.usersList(plugin, sender, args);
     }
 
-    @Command(name = "pex",
-            syntax = "user",
-            permission = "permissions.manage.users",
-            description = "List all registered users (alias)")
-    public void userListAnotherAlias(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
-        this.usersList(plugin, sender, args);
-    }
-
+    /* @Command(name = "pex",  //user is not plural... seriously why the double cmd....
+     syntax = "user",
+     permission = "permissions.manage.users",
+     description = "List all registered users (alias)")
+     public void userListAnotherAlias(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
+     this.usersList(plugin, sender, args);
+     } */
     /**
      * User permission management
      *
@@ -82,16 +81,26 @@ public class UserCommands extends PermissionsCommand {
             permission = "permissions.manage.users.permissions.<user>",
             description = "List user permissions (list alias)")
     public void userListAliasPermissions(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
+        if (args.get("user").length() < 2) {
+            sender.sendMessage(ChatColor.RED + "User name length can not be less then 2!");
+            return;
+        }
+
         String userName = this.autoCompletePlayerName(args.get("user"));
-        String worldName = this.autoCompleteWorldName(args.get("world"));
 
         if (userName == null) {
             sender.sendMessage(ChatColor.RED + "User does not match any known names!");
             return;
         }
+
+        String worldName = this.autoCompleteWorldName(args.get("world"));
+        sender.sendMessage("autoCompletePlayerName returning: " + userName);
+        sender.sendMessage("autoCompleteWorldName returning: " + worldName);
+
         PermissionUser user = plugin.getPermissionsManager().getUser(userName);
         userName = user.getName();
-
+        sender.sendMessage("getUser returning: " + userName);
+        sender.sendMessage("");
         sender.sendMessage("'" + describeUser(user) + "' is a member of:");
         printEntityInheritance(sender, user.getParents());
 
@@ -120,6 +129,11 @@ public class UserCommands extends PermissionsCommand {
             permission = "permissions.manage.users.permissions.<user>",
             description = "List user permissions")
     public void userListPermissions(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
+        if (args.get("user").length() < 2) {
+            sender.sendMessage(ChatColor.RED + "User name length can not be less then 2!");
+            return;
+        }
+
         String userName = this.autoCompletePlayerName(args.get("user"));
         String worldName = this.autoCompleteWorldName(args.get("world"));
 
@@ -142,6 +156,11 @@ public class UserCommands extends PermissionsCommand {
             permission = "permissions.manage.users.permissions.<user>",
             description = "List user actual superperms")
     public void userListSuperPermissions(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
+        if (args.get("user").length() < 2) {
+            sender.sendMessage(ChatColor.RED + "User name length can not be less then 2!");
+            return;
+        }
+
         String userName = this.autoCompletePlayerName(args.get("user"));
         if (userName == null) {
             sender.sendMessage(ChatColor.RED + "User does not match any known names!");
@@ -178,6 +197,11 @@ public class UserCommands extends PermissionsCommand {
             permission = "permissions.manage.users.prefix.<user>",
             description = "Get or set <user> prefix")
     public void userPrefix(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
+        if (args.get("user").length() < 2) {
+            sender.sendMessage(ChatColor.RED + "User name length can not be less then 2!");
+            return;
+        }
+
         String userName = this.autoCompletePlayerName(args.get("user"));
         String worldName = this.autoCompleteWorldName(args.get("world"));
 
@@ -201,6 +225,11 @@ public class UserCommands extends PermissionsCommand {
             permission = "permissions.manage.users.suffix.<user>",
             description = "Get or set <user> suffix")
     public void userSuffix(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
+        if (args.get("user").length() < 2) {
+            sender.sendMessage(ChatColor.RED + "User name length can not be less then 2!");
+            return;
+        }
+
         String userName = this.autoCompletePlayerName(args.get("user"));
         String worldName = this.autoCompleteWorldName(args.get("world"));
 
@@ -224,6 +253,11 @@ public class UserCommands extends PermissionsCommand {
             permission = "permissions.manage.<user>",
             description = "Toggle debug only for <user>")
     public void userToggleDebug(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
+        if (args.get("user").length() < 2) {
+            sender.sendMessage(ChatColor.RED + "User name length can not be less then 2!");
+            return;
+        }
+
         String userName = this.autoCompletePlayerName(args.get("user"));
 
         if (userName == null) {
@@ -242,6 +276,11 @@ public class UserCommands extends PermissionsCommand {
             permission = "permissions.manage.<user>",
             description = "Checks player for <permission>")
     public void userCheckPermission(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
+        if (args.get("user").length() < 2) {
+            sender.sendMessage(ChatColor.RED + "User name length can not be less then 2!");
+            return;
+        }
+
         String userName = this.autoCompletePlayerName(args.get("user"));
         String worldName = this.autoCompleteWorldName(args.get("world"));
         if (userName == null) {
@@ -255,7 +294,7 @@ public class UserCommands extends PermissionsCommand {
         String permission = user.getMatchingExpression(args.get("permission"), worldName);
 
         if (permission == null) {
-            sender.sendMessage("Permission \"" + permission + "\" has not been set for \"Player \"" + describeUser(user));
+            sender.sendMessage("Permission \"" + args.get("permission") + "\" does not exist for \"Player \"" + describeUser(user));
         } else {
             sender.sendMessage("Player \"" + describeUser(user) + "\" " + (user.explainExpression(permission) ? "has" : "doesn't have") + " \"" + permission + "\"");
         }
@@ -266,6 +305,11 @@ public class UserCommands extends PermissionsCommand {
             permission = "permissions.manage.<user>",
             description = "Toggle debug only for <user>")
     public void userGetOption(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
+        if (args.get("user").length() < 2) {
+            sender.sendMessage(ChatColor.RED + "User name length can not be less then 2!");
+            return;
+        }
+
         String userName = this.autoCompletePlayerName(args.get("user"));
         String worldName = this.autoCompleteWorldName(args.get("world"));
         if (userName == null) {
@@ -286,6 +330,11 @@ public class UserCommands extends PermissionsCommand {
             permission = "permissions.manage.users.<user>",
             description = "Remove <user>")
     public void userDelete(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
+        if (args.get("user").length() < 2) {
+            sender.sendMessage(ChatColor.RED + "User name length can not be less then 2!");
+            return;
+        }
+
         String userName = this.autoCompletePlayerName(args.get("user"));
         if (userName == null) {
             sender.sendMessage(ChatColor.RED + "User does not match any known names!");
@@ -309,6 +358,11 @@ public class UserCommands extends PermissionsCommand {
             permission = "permissions.manage.users.permissions.<user>",
             description = "Add <permission> to <user> in [world]")
     public void userAddPermission(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
+        if (args.get("user").length() < 2) {
+            sender.sendMessage(ChatColor.RED + "User name length can not be less then 2!");
+            return;
+        }
+
         String userName = this.autoCompletePlayerName(args.get("user"));
         String worldName = this.autoCompleteWorldName(args.get("world"));
         if (userName == null) {
@@ -329,6 +383,11 @@ public class UserCommands extends PermissionsCommand {
             permission = "permissions.manage.users.permissions.<user>",
             description = "Remove permission from <user> in [world]")
     public void userRemovePermission(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
+        if (args.get("user").length() < 2) {
+            sender.sendMessage(ChatColor.RED + "User name length can not be less then 2!");
+            return;
+        }
+
         String userName = this.autoCompletePlayerName(args.get("user"));
         String worldName = this.autoCompleteWorldName(args.get("world"));
         if (userName == null) {
@@ -351,6 +410,11 @@ public class UserCommands extends PermissionsCommand {
             permission = "permissions.manage.users.permissions.<user>",
             description = "Swap <permission> and <targetPermission> in permission list. Could be number or permission itself")
     public void userSwapPermission(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
+        if (args.get("user").length() < 2) {
+            sender.sendMessage(ChatColor.RED + "User name length can not be less then 2!");
+            return;
+        }
+
         String userName = this.autoCompletePlayerName(args.get("user"));
         String worldName = this.autoCompleteWorldName(args.get("world"));
         if (userName == null) {
@@ -383,6 +447,11 @@ public class UserCommands extends PermissionsCommand {
             permission = "permissions.manage.users.permissions.timed.<user>",
             description = "Add timed <permissions> to <user> for [lifetime] seconds in [world]")
     public void userAddTimedPermission(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
+        if (args.get("user").length() < 2) {
+            sender.sendMessage(ChatColor.RED + "User name length can not be less then 2!");
+            return;
+        }
+
         String userName = this.autoCompletePlayerName(args.get("user"));
         String worldName = this.autoCompleteWorldName(args.get("world"));
         if (userName == null) {
@@ -411,6 +480,11 @@ public class UserCommands extends PermissionsCommand {
             permission = "permissions.manage.users.permissions.timed.<user>",
             description = "Remove timed <permission> from <user> in [world]")
     public void userRemoveTimedPermission(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
+        if (args.get("user").length() < 2) {
+            sender.sendMessage(ChatColor.RED + "User name length can not be less then 2!");
+            return;
+        }
+
         String userName = this.autoCompletePlayerName(args.get("user"));
         String worldName = this.autoCompleteWorldName(args.get("world"));
         String permission = args.get("permission");
@@ -431,6 +505,11 @@ public class UserCommands extends PermissionsCommand {
             permission = "permissions.manage.users.permissions.<user>",
             description = "Set <option> to <value> in [world]")
     public void userSetOption(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
+        if (args.get("user").length() < 2) {
+            sender.sendMessage(ChatColor.RED + "User name length can not be less then 2!");
+            return;
+        }
+
         String userName = this.autoCompletePlayerName(args.get("user"));
         String worldName = this.autoCompleteWorldName(args.get("world"));
         if (userName == null) {
@@ -462,6 +541,11 @@ public class UserCommands extends PermissionsCommand {
             permission = "permissions.manage.membership.<user>",
             description = "List all <user> groups")
     public void userListGroup(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
+        if (args.get("user").length() < 2) {
+            sender.sendMessage(ChatColor.RED + "User name length can not be less then 2!");
+            return;
+        }
+
         String userName = this.autoCompletePlayerName(args.get("user"));
         String worldName = this.autoCompleteWorldName(args.get("world"));
         if (userName == null) {
@@ -481,6 +565,11 @@ public class UserCommands extends PermissionsCommand {
             permission = "permissions.manage.membership.<group>",
             description = "Add <user> to <group>")
     public void userAddGroup(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
+        if (args.get("user").length() < 2) {
+            sender.sendMessage(ChatColor.RED + "User name length can not be less then 2!");
+            return;
+        }
+
         String userName = this.autoCompletePlayerName(args.get("user"));
         String groupName = this.autoCompleteGroupName(args.get("group"));
         String worldName = this.autoCompleteWorldName(args.get("world"));
@@ -513,7 +602,12 @@ public class UserCommands extends PermissionsCommand {
             permission = "",
             description = "Set <group> for <user>")
     public void userSetGroup(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
-        PermissionManager manager = plugin.getPermissionsManager();
+        if (args.get("user").length() < 2) {
+            sender.sendMessage(ChatColor.RED + "User name length can not be less then 2!");
+            return;
+        }
+
+        PermissionManager permManager = plugin.getPermissionsManager();
         String groupName = args.get("group");
 
         List<PermissionGroup> groups;
@@ -523,21 +617,21 @@ public class UserCommands extends PermissionsCommand {
             groups = new ArrayList<>(groupsNames.length);
 
             for (String addName : groupsNames) {
-                if (sender instanceof Player && !manager.has((Player) sender, "permissions.manage.membership." + addName.toLowerCase())) {
+                if (sender instanceof Player && !permManager.has((Player) sender, "permissions.manage.membership." + addName.toLowerCase())) {
                     sender.sendMessage(ChatColor.RED + "Don't have enough permission for group " + addName);
                     return;
                 }
 
-                groups.add(manager.getGroup(this.autoCompleteGroupName(addName)));
+                groups.add(permManager.getGroup(this.autoCompleteGroupName(addName)));
             }
 
         } else {
             groupName = this.autoCompleteGroupName(groupName);
 
             if (groupName != null) {
-                groups = Collections.singletonList(manager.getGroup(groupName));
+                groups = Collections.singletonList(permManager.getGroup(groupName));
 
-                if (sender instanceof Player && !manager.has((Player) sender, "permissions.manage.membership." + groupName.toLowerCase())) {
+                if (sender instanceof Player && !permManager.has((Player) sender, "permissions.manage.membership." + groupName.toLowerCase())) {
                     sender.sendMessage(ChatColor.RED + "Don't have enough permission for group " + groupName);
                     return;
                 }
@@ -554,7 +648,7 @@ public class UserCommands extends PermissionsCommand {
             sender.sendMessage(ChatColor.RED + "User does not match any known names!");
             return;
         }
-        PermissionUser user = manager.getUser(userName);
+        PermissionUser user = permManager.getUser(userName);
 
         if (!groups.isEmpty()) {
             user.setParents(groups, worldName);
@@ -571,6 +665,11 @@ public class UserCommands extends PermissionsCommand {
             permission = "permissions.manage.membership.<group>",
             description = "Remove <user> from <group>")
     public void userRemoveGroup(PermissionsEx plugin, CommandSender sender, Map<String, String> args) {
+        if (args.get("user").length() < 2) {
+            sender.sendMessage(ChatColor.RED + "User name length can not be less then 2!");
+            return;
+        }
+        
         String userName = this.autoCompletePlayerName(args.get("user"));
         String groupName = this.autoCompleteGroupName(args.get("group"));
         String worldName = this.autoCompleteWorldName(args.get("world"));
